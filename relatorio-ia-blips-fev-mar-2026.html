@@ -751,19 +751,25 @@
         </div>
         <div class="legend" style="margin-top:12px">
           <div class="legend-item"><div class="legend-dot" style="background:#4B5563"></div>Sem IA — Fev</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#14B8A6"></div>Via IA — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FFA300"></div>Via Dalila SDR — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#F59E0B"></div>Via Dalila Vendas — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#14B8A6"></div>Via Outros — Fev</div>
           <div class="legend-item"><div class="legend-dot" style="background:#9CA3AF"></div>Sem IA — Mar</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#5EEAD4"></div>Via IA — Mar</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FBBF24"></div>Via Dalila SDR — Mar</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FCD34D"></div>Via Dalila Vendas — Mar</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#5EEAD4"></div>Via Outros — Mar</div>
         </div>
       </div>
       <div class="chart-card">
-        <h3>Papel das IAs como porta de entrada</h3>
-        <div class="chart-sub">% dos protocolos de cada pilar que passaram por uma IA antes</div>
+        <h3>Porta de entrada por pilar (% via cada agente)</h3>
+        <div class="chart-sub">Dalila SDR · Dalila Vendas · Kyara/Outros · Direto</div>
         <div class="chart-wrap" style="height:300px">
           <canvas id="barMktGateway"></canvas>
         </div>
         <div class="legend" style="margin-top:12px">
-          <div class="legend-item"><div class="legend-dot" style="background:#8B5CF6"></div>Via IA</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FFA300"></div>Via Dalila SDR</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#F59E0B"></div>Via Dalila Vendas</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#14B8A6"></div>Via Kyara+Outros</div>
           <div class="legend-item"><div class="legend-dot" style="background:#E5E7EB"></div>Chegou direto</div>
         </div>
       </div>
@@ -781,7 +787,7 @@
     <div class="section-title">Evolução Diária — Marketing &amp; Comercial</div>
     <div class="chart-full" style="margin-bottom:24px">
       <h3>Volume diário de atendimentos</h3>
-      <div class="chart-sub">Dalila · Kyara · Mariah · linha vertical separa os meses</div>
+      <div class="chart-sub">Dalila SDR · Dalila Outbound · Dalila Vendas · Kyara · Mariah · linha vertical separa os meses</div>
       <div class="chart-wrap" style="height:280px">
         <canvas id="lineMktDailyVolume"></canvas>
       </div>
@@ -805,46 +811,130 @@
     <div class="section-title">Perfil dos Agentes — Marketing &amp; Comercial</div>
     <div class="agents-grid">
 
-      <!-- DALILA -->
+      <!-- DALILA SDR -->
       <div class="agent-card">
         <div class="agent-header">
           <div class="agent-avatar" style="background:#FFA300">D</div>
           <div>
-            <div class="agent-name">Dalila</div>
-            <div class="agent-role">Comercial · SDR / Vendas / Outbound</div>
+            <div class="agent-name">Dalila SDR</div>
+            <div class="agent-role">Qualificação de leads · IA - Comercial SDR</div>
           </div>
         </div>
         <div class="agent-stats">
           <div class="stat-box">
             <div class="s-label">Atendimentos</div>
-            <div class="s-val">36.508</div>
-            <div class="s-sub">3 departamentos</div>
+            <div class="s-val">31.429</div>
+            <div class="s-sub">maior volume comercial</div>
           </div>
           <div class="stat-box">
             <div class="s-label">Taxa Transferência</div>
-            <div class="s-val">22,7%</div>
-            <div class="s-sub">8.283 casos</div>
+            <div class="s-val">26,1%</div>
+            <div class="s-sub">8.196 casos</div>
           </div>
         </div>
         <div class="agent-bar-wrap">
-          <div class="bar-label"><span>Contenção</span><span style="color:#059669;font-weight:700">77,3%</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:77.3%;background:#FFA300"></div></div>
+          <div class="bar-label"><span>Contenção</span><span style="color:#059669;font-weight:700">73,9%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:73.9%;background:#FFA300"></div></div>
         </div>
         <div class="evol-row">
-          <div class="evol-item"><div class="e-month">Fev</div><div class="e-val">19.148</div><div class="e-rate">Transf: 24,2%</div></div>
-          <div class="evol-item"><div class="e-month">Mar</div><div class="e-val">17.360</div><div class="e-rate">Transf: 21,0%</div></div>
+          <div class="evol-item"><div class="e-month">Fev</div><div class="e-val">15.449</div><div class="e-rate">Transf: 27,8%</div></div>
+          <div class="evol-item"><div class="e-month">Mar</div><div class="e-val">15.980</div><div class="e-rate">Transf: 24,4%</div></div>
         </div>
-        <span class="agent-tag ok" style="margin-top:10px">▼ −3,2pp transferência em Mar ✓</span>
+        <span class="agent-tag ok" style="margin-top:10px">▼ −3,4pp transferência em Mar ✓</span>
         <div style="margin-top:6px">
-          <div style="font-size:11px;color:var(--text-muted)">CSAT: <strong>3,43/5</strong> · 1,3% resposta</div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Outbound: <strong>3.027 (Fev) → 350 (Mar)</strong> — menos campanhas</div>
+          <div style="font-size:11px;color:var(--text-muted)">Inatividade: <strong>18,1%</strong> (5.698) · leads sem resposta</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Qualifica leads inbound e repassa ao time comercial humano</div>
         </div>
         <div class="agent-destinos">
           <h5>Transfere principalmente para</h5>
-          <div class="dest-row"><div class="dest-label">SDR Humano</div><div class="dest-track"><div class="dest-fill" style="width:100%;background:#FFA300"></div></div><div class="dest-num">4.605</div></div>
-          <div class="dest-row"><div class="dest-label">Comercial - Sorvete</div><div class="dest-track"><div class="dest-fill" style="width:26%;background:#FFA300"></div></div><div class="dest-num">1.216</div></div>
-          <div class="dest-row"><div class="dest-label">Comercial - Artesanato</div><div class="dest-track"><div class="dest-fill" style="width:11%;background:#FFA300"></div></div><div class="dest-num">528</div></div>
-          <div class="dest-row"><div class="dest-label">Comercial - Fitness</div><div class="dest-track"><div class="dest-fill" style="width:11%;background:#FFA300"></div></div><div class="dest-num">522</div></div>
+          <div class="dest-row"><div class="dest-label">SDR Humano</div><div class="dest-track"><div class="dest-fill" style="width:100%;background:#FFA300"></div></div><div class="dest-num">4.524</div></div>
+          <div class="dest-row"><div class="dest-label">Comercial - Sorvete</div><div class="dest-track"><div class="dest-fill" style="width:20%;background:#FFA300"></div></div><div class="dest-num">890</div></div>
+          <div class="dest-row"><div class="dest-label">Comercial - Fitness</div><div class="dest-track"><div class="dest-fill" style="width:11%;background:#FFA300"></div></div><div class="dest-num">509</div></div>
+          <div class="dest-row"><div class="dest-label">Comercial - Artesanato</div><div class="dest-track"><div class="dest-fill" style="width:7%;background:#FFA300"></div></div><div class="dest-num">322</div></div>
+        </div>
+      </div>
+
+      <!-- DALILA OUTBOUND -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar" style="background:#FB923C">D</div>
+          <div>
+            <div class="agent-name">Dalila Outbound</div>
+            <div class="agent-role">Campanhas ativas · IA - Comercial Outbound</div>
+          </div>
+        </div>
+        <div class="agent-stats">
+          <div class="stat-box">
+            <div class="s-label">Atendimentos</div>
+            <div class="s-val">3.377</div>
+            <div class="s-sub" style="color:#DC2626;font-weight:600">−88,4% em Mar ⚠️</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-label">Taxa Transferência</div>
+            <div class="s-val">1,5%</div>
+            <div class="s-sub">50 casos</div>
+          </div>
+        </div>
+        <div class="agent-bar-wrap">
+          <div class="bar-label"><span>Contenção</span><span style="color:#059669;font-weight:700">98,5%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:98.5%;background:#FB923C"></div></div>
+        </div>
+        <div class="evol-row">
+          <div class="evol-item"><div class="e-month">Fev</div><div class="e-val">3.027</div><div class="e-rate">Transf: 1,5%</div></div>
+          <div class="evol-item"><div class="e-month">Mar</div><div class="e-val">350</div><div class="e-rate">Transf: 1,4%</div></div>
+        </div>
+        <span class="agent-tag warn" style="margin-top:10px">Volume caiu drasticamente em Mar — verificar campanhas</span>
+        <div style="margin-top:6px">
+          <div style="font-size:11px;color:var(--text-muted)">Inatividade: <strong>0,9%</strong> (31) — resposta ativa de leads abordados</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Atua em campanhas proativas · quase tudo resolvido pelo bot</div>
+        </div>
+        <div class="agent-destinos">
+          <h5>Quando transfere, vai para</h5>
+          <div class="dest-row"><div class="dest-label">SDR Humano</div><div class="dest-track"><div class="dest-fill" style="width:100%;background:#FB923C"></div></div><div class="dest-num">47</div></div>
+          <div class="dest-row"><div class="dest-label">Outros</div><div class="dest-track"><div class="dest-fill" style="width:6%;background:#FB923C"></div></div><div class="dest-num">3</div></div>
+        </div>
+      </div>
+
+      <!-- DALILA VENDAS -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar" style="background:#F59E0B">D</div>
+          <div>
+            <div class="agent-name">Dalila Vendas</div>
+            <div class="agent-role">Fechamento de negócio · IA - Comercial Vendas</div>
+          </div>
+        </div>
+        <div class="agent-stats">
+          <div class="stat-box">
+            <div class="s-label">Atendimentos</div>
+            <div class="s-val">1.759</div>
+            <div class="s-sub" style="color:#059669;font-weight:600">+50,6% em Mar ▲</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-label">Taxa Transferência</div>
+            <div class="s-val">30,3%</div>
+            <div class="s-sub">533 casos</div>
+          </div>
+        </div>
+        <div class="agent-bar-wrap">
+          <div class="bar-label"><span>Contenção</span><span style="color:#059669;font-weight:700">69,7%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:69.7%;background:#F59E0B"></div></div>
+        </div>
+        <div class="evol-row">
+          <div class="evol-item"><div class="e-month">Fev</div><div class="e-val">702</div><div class="e-rate">Transf: 44,2%</div></div>
+          <div class="evol-item"><div class="e-month">Mar</div><div class="e-val">1.057</div><div class="e-rate">Transf: 21,1%</div></div>
+        </div>
+        <span class="agent-tag ok" style="margin-top:10px">▼ −23,1pp transferência em Mar — melhora expressiva ✓</span>
+        <div style="margin-top:6px">
+          <div style="font-size:11px;color:var(--text-muted)">Inatividade: <strong>16,0%</strong> (281) · maior taxa de conversão em Fev</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Atua no fechamento · transfere para times de produto específico</div>
+        </div>
+        <div class="agent-destinos">
+          <h5>Transfere principalmente para</h5>
+          <div class="dest-row"><div class="dest-label">Comercial - Sorvete</div><div class="dest-track"><div class="dest-fill" style="width:100%;background:#F59E0B"></div></div><div class="dest-num">322</div></div>
+          <div class="dest-row"><div class="dest-label">Comercial - Food</div><div class="dest-track"><div class="dest-fill" style="width:18%;background:#F59E0B"></div></div><div class="dest-num">57</div></div>
+          <div class="dest-row"><div class="dest-label">Documentação</div><div class="dest-track"><div class="dest-fill" style="width:9%;background:#F59E0B"></div></div><div class="dest-num">30</div></div>
+          <div class="dest-row"><div class="dest-label">Comercial - Construção</div><div class="dest-track"><div class="dest-fill" style="width:9%;background:#F59E0B"></div></div><div class="dest-num">29</div></div>
         </div>
       </div>
 
@@ -1406,22 +1496,35 @@ new Chart(document.getElementById('barEsperanzaGateway'), {
 // ══ MARKETING — Comparativo por Pilar ══
 const mktGrupos      = ['IA (retidos)', 'SDR', 'Comercial CV', 'Com. Sorvete', 'Outras Comerc.', 'Inatividade'];
 const mktGruposShort = ['IA (retidos)', 'SDR', 'Comercial CV', 'Com. Sorvete', 'Outras Comerc.', 'Inatividade'];
-const mktFevSemIA  = [    0,  240, 1652, 1006, 3324,  366];
-const mktFevViaIA  = [20818, 3096,  122,  770,  436,   12];
-const mktMarSemIA  = [    0,  103, 2917, 2200, 7070,  195];
-const mktMarViaIA  = [27059, 1488,  310,  496, 1019,  472];
-const mktFevTotais = mktFevSemIA.map((v,i) => v + mktFevViaIA[i]);
-const mktMarTotais = mktMarSemIA.map((v,i) => v + mktMarViaIA[i]);
+// Sem IA
+const mktFevSemIA   = [    0,  240, 1652, 1006, 3324,  366];
+const mktMarSemIA   = [    0,  103, 2917, 2200, 7070,  195];
+// Via Dalila SDR
+const mktFevViaSdr  = [11150, 3048,   60,  543,  397,   10];
+const mktMarViaSdr  = [12083, 1476,  229,  347,  685,    9];
+// Via Dalila Vendas
+const mktFevViaVen  = [  392,    2,   24,  209,   72,    2];
+const mktMarViaVen  = [  834,    4,    1,  113,  108,    3];
+// Via Outros (Outbound + Kyara + Mariah)
+const mktFevViaOut  = [ 9276,   46,   38,   18,  -33,    0]; // negativo corrigido para 0
+const mktMarViaOut  = [14142,   15,   80,   36,  226,  460];
+// Total por mês
+const mktFevTotais  = mktFevSemIA.map((v,i) => v + mktFevViaSdr[i] + mktFevViaVen[i] + Math.max(0,mktFevViaOut[i]));
+const mktMarTotais  = mktMarSemIA.map((v,i) => v + mktMarViaSdr[i] + mktMarViaVen[i] + Math.max(0,mktMarViaOut[i]));
 
 new Chart(document.getElementById('barMktGrupos'), {
   type: 'bar',
   data: {
     labels: mktGrupos,
     datasets: [
-      { label: 'Sem IA — Fev',   data: mktFevSemIA, backgroundColor: '#4B5563', stack: 'fev' },
-      { label: 'Via IA — Fev',   data: mktFevViaIA, backgroundColor: '#14B8A6', stack: 'fev' },
-      { label: 'Sem IA — Mar',   data: mktMarSemIA, backgroundColor: '#9CA3AF', stack: 'mar' },
-      { label: 'Via IA — Mar',   data: mktMarViaIA, backgroundColor: '#5EEAD4', stack: 'mar' }
+      { label: 'Sem IA — Fev',         data: mktFevSemIA,  backgroundColor: '#4B5563', stack: 'fev' },
+      { label: 'Via Dalila SDR — Fev',  data: mktFevViaSdr, backgroundColor: '#FFA300', stack: 'fev' },
+      { label: 'Via Dalila Vendas — Fev',data: mktFevViaVen,backgroundColor: '#F59E0B', stack: 'fev' },
+      { label: 'Via Outros — Fev',      data: mktFevViaOut.map(v=>Math.max(0,v)), backgroundColor: '#14B8A6', stack: 'fev' },
+      { label: 'Sem IA — Mar',          data: mktMarSemIA,  backgroundColor: '#9CA3AF', stack: 'mar' },
+      { label: 'Via Dalila SDR — Mar',  data: mktMarViaSdr, backgroundColor: '#FBBF24', stack: 'mar' },
+      { label: 'Via Dalila Vendas — Mar',data: mktMarViaVen,backgroundColor: '#FCD34D', stack: 'mar' },
+      { label: 'Via Outros — Mar',      data: mktMarViaOut, backgroundColor: '#5EEAD4', stack: 'mar' }
     ]
   },
   options: {
@@ -1439,14 +1542,15 @@ new Chart(document.getElementById('barMktGrupos'), {
             const isFev = ctx.dataset.stack === 'fev';
             const tot   = isFev ? mktFevTotais[idx] : mktMarTotais[idx];
             const pct   = tot > 0 ? (v / tot * 100).toFixed(1) : '0';
-            return `  ${isFev ? 'Fev' : 'Mar'} · ${ctx.dataset.label.split('—')[0].trim()}: ${v.toLocaleString('pt-BR')} (${pct}%)`;
+            const lbl   = ctx.dataset.label.replace(/ — (Fev|Mar)$/,'');
+            return `  ${isFev ? 'Fev' : 'Mar'} · ${lbl}: ${v.toLocaleString('pt-BR')} (${pct}%)`;
           },
           footer(items) {
             const idx = items[0].dataIndex;
             const varPct = mktFevTotais[idx] > 0
               ? ((mktMarTotais[idx] - mktFevTotais[idx]) / mktFevTotais[idx] * 100).toFixed(1) : '0';
             return [`  Total Fev: ${mktFevTotais[idx].toLocaleString('pt-BR')}`,
-                    `  Total Mar: ${mktMarTotais[idx].toLocaleString('pt-BR')}  (${varPct >= 0 ? '+' : ''}${varPct}%)`];
+                    `  Total Mar: ${mktMarTotais[idx].toLocaleString('pt-BR')}  (${Number(varPct)>=0?'+':''}${varPct}%)`];
           }
         },
         footerFont: { weight: 'bold' }, footerColor: '#FFA300'
@@ -1459,20 +1563,36 @@ new Chart(document.getElementById('barMktGrupos'), {
   }
 });
 
-// Mkt gateway
-const mktGwLabels = ['SDR', 'Comercial CV', 'Com. Sorvete', 'Outras Comerc.', 'Inatividade'];
-const mktGwVia    = [4584, 432, 1266, 1455, 484];
-const mktGwDireto = [ 343, 4569, 3206, 10394, 561];
-const mktGwTotal  = mktGwVia.map((v,i) => v + mktGwDireto[i]);
-const mktGwPctVia = mktGwVia.map((v,i) => +(v / mktGwTotal[i] * 100).toFixed(1));
-const mktGwPctDir = mktGwDireto.map((v,i) => +(v / mktGwTotal[i] * 100).toFixed(1));
+// Mkt gateway — por pilar, breakdown por agente (% do total do pilar)
+const mktGwLabels  = ['SDR', 'Comercial CV', 'Com. Sorvete', 'Com. Artesanato', 'Com. CV'];
+const mktGwViaSdr  = [4524,  289,  890,  322,  289];
+const mktGwViaVen  = [   6,   25,  322,   10,   25];
+const mktGwViaOut  = [  84,  159,   76,   21,  159]; // Outbound+Kyara+Mariah
+const mktGwDireto  = [ 343, 4569, 3206, 3437, 4569];
+const mktGwLabelsGw= ['SDR', 'Comercial CV', 'Com. Sorvete', 'Artesanato', 'Construção'];
+// Simpler gateway: just SDR and Sorvete (dominant)
+const mktGwLbls2   = ['SDR', 'Com. Sorvete', 'Artesanato', 'Construção', 'Confecção'];
+const mktGwVia2    = [4584, 1266, 353, 208, 99];
+const mktGwDir2    = [ 343, 3206, 3433, 1304, 2835];
+const mktGwTot2    = mktGwVia2.map((v,i) => v + mktGwDir2[i]);
+// Breakdown por Dalila: SDR%, Vendas%, Outros%, Direto%
+const mktGwViaSdrPct = mktGwVia2.map((_,i) => {
+  const sdr=[4524,543,322,178,56]; const ven=[6,322,10,29,8]; const out=[54,401,21,1,35];
+  const d=mktGwDir2[i]; const t=mktGwTot2[i];
+  return [+(sdr[i]/t*100).toFixed(1), +(ven[i]/t*100).toFixed(1), +(out[i]/t*100).toFixed(1), +(d/t*100).toFixed(1)];
+});
 
 new Chart(document.getElementById('barMktGateway'), {
   type: 'bar',
-  data: { labels: mktGwLabels, datasets: [
-    { label: 'Via IA',        data: mktGwPctVia, backgroundColor: '#8B5CF6' },
-    { label: 'Chegou direto', data: mktGwPctDir, backgroundColor: '#E5E7EB' }
-  ]},
+  data: {
+    labels: mktGwLbls2,
+    datasets: [
+      { label: 'Via Dalila SDR',    data: mktGwViaSdrPct.map(r=>r[0]), backgroundColor: '#FFA300' },
+      { label: 'Via Dalila Vendas', data: mktGwViaSdrPct.map(r=>r[1]), backgroundColor: '#F59E0B' },
+      { label: 'Via Outros (Kyara+)',data: mktGwViaSdrPct.map(r=>r[2]),backgroundColor: '#14B8A6' },
+      { label: 'Chegou direto',     data: mktGwViaSdrPct.map(r=>r[3]), backgroundColor: '#E5E7EB' }
+    ]
+  },
   options: {
     indexAxis: 'y', responsive: true, maintainAspectRatio: false,
     interaction: { mode: 'index', intersect: false },
@@ -1481,12 +1601,13 @@ new Chart(document.getElementById('barMktGateway'), {
       tooltip: {
         mode: 'index', intersect: false,
         callbacks: {
-          title: (i) => mktGwLabels[i[0].dataIndex],
+          title: (i) => mktGwLbls2[i[0].dataIndex],
           label: (c) => {
-            const idx = c.dataIndex, isVia = c.datasetIndex === 0;
-            return `  ${c.dataset.label}: ${c.raw}% (${(isVia ? mktGwVia : mktGwDireto)[idx].toLocaleString('pt-BR')})`;
+            const v = c.raw ?? 0;
+            if (v === 0) return null;
+            return `  ${c.dataset.label}: ${v}%`;
           },
-          footer: (i) => `  Total: ${mktGwTotal[i[0].dataIndex].toLocaleString('pt-BR')}`
+          footer: (i) => `  Total: ${mktGwTot2[i[0].dataIndex].toLocaleString('pt-BR')}`
         },
         footerFont: { weight: 'bold' }, footerColor: '#FFA300'
       }
@@ -1506,7 +1627,10 @@ const marcoIdx = rawDates.findIndex(d => d.startsWith('2026-03'));
 
 // Volume diário por agente
 const volEsperanza = [1,12,15,106,664,125,1,4,4836,807,67,2702,1213,19,21,2753,394,2311,656,819,23,13,2197,689,711,1038,199,6,0,1014,135,37,986,275,8,2,936,1083,122,781,101,5,1,2119,452,1286,139,1871,8,12,2178,246,605,2862,1219,7,1,1608,1923];
-const volDalila    = [50,142,311,803,584,91,89,110,941,836,583,660,1066,105,153,448,435,1204,1086,2133,1787,28,759,1702,1112,1244,600,86,27,124,371,544,325,102,48,72,360,529,740,187,606,49,36,1249,1168,1653,601,266,79,101,636,1069,1279,1403,1326,858,176,1254,122];
+const volDalilaSdr     = [12,114,273,746,564,76,56,61,929,811,560,652,1056,85,131,422,397,1178,1073,1132,239,9,236,1662,1085,1224,582,84,23,110,338,530,284,82,46,67,335,511,721,136,595,49,35,1227,1155,1645,549,228,78,101,615,701,1196,1271,1294,829,139,1033,57];
+const volDalilaOutbound= [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,992,1538,0,497,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,349,0,0,0,0,0,0,0];
+const volDalilaVendas  = [40,28,39,58,20,15,33,50,12,26,23,8,10,21,22,26,38,26,14,12,18,20,30,41,31,20,19,2,4,14,33,14,41,19,2,5,25,21,19,52,11,0,1,23,14,14,52,38,1,1,22,19,86,135,35,31,37,222,66];
+const volDalila        = volDalilaSdr.map((v,i) => v + volDalilaOutbound[i] + volDalilaVendas[i]); // compatibilidade
 const volSocorro   = [39,645,642,502,400,459,133,54,582,648,491,492,380,152,65,282,188,535,638,550,206,96,710,607,554,558,526,218,40,613,591,569,533,530,133,63,677,684,575,610,608,190,83,590,522,664,601,683,150,72,718,698,622,679,543,169,84,642,599];
 const volKyara     = [1,321,212,142,112,106,0,2,185,274,166,133,53,1,1,1,128,233,119,281,4,1,207,339,196,161,291,0,0,240,307,284,208,126,0,0,161,133,103,376,176,0,0,573,816,944,702,535,5,1,665,472,425,463,538,8,2,813,653];
 const volMariah    = [27,106,114,132,111,101,74,90,93,119,124,115,116,88,94,119,123,145,137,147,106,88,109,103,79,78,48,22,12,68,119,114,108,98,64,83,96,119,114,126,112,73,101,114,114,114,129,140,110,124,202,267,278,306,275,195,194,125,81];
@@ -1519,13 +1643,19 @@ function filterPct(pcts, vols, minVol) {
   return pcts.map((v,i) => (vols[i] >= minVol ? v : null));
 }
 const pctEsperanzaRaw = [0.0,33.3,80.0,12.3,7.7,5.6,100.0,50.0,4.1,6.8,19.4,6.7,7.3,31.6,52.4,5.5,4.3,7.9,9.6,4.4,21.7,0.0,5.8,4.8,5.8,7.2,6.5,33.3,null,5.6,7.4,16.2,5.2,4.4,62.5,50.0,4.2,6.4,9.8,8.5,8.9,0.0,100.0,6.6,12.4,7.2,16.5,6.3,12.5,16.7,7.1,13.4,6.4,7.3,6.3,28.6,0.0,4.9,7.4];
-const pctDalilaRaw   = [22.0,31.7,25.1,11.2,5.8,23.1,28.1,30.9,3.2,6.3,2.7,12.7,7.6,15.2,3.9,6.9,14.7,11.3,5.9,3.8,2.2,14.3,14.5,6.3,5.8,7.9,12.7,65.1,18.5,52.4,25.9,8.8,9.5,28.4,27.1,19.4,23.1,17.8,32.4,24.6,13.7,24.5,22.2,9.7,11.1,8.3,13.0,21.1,19.0,18.8,14.6,7.0,9.9,9.6,7.0,5.0,11.9,10.5,30.3];
+const pctDalilaSdrRaw     = [8.3,67.5,65.9,19.4,16.0,92.1,94.6,95.1,11.3,11.8,9.3,33.7,26.4,95.3,96.9,97.4,88.9,26.1,25.7,27.4,33.9,11.1,66.1,11.8,8.8,21.0,25.8,84.5,69.6,68.2,53.3,27.0,38.0,53.7,41.3,43.3,49.9,24.5,37.3,44.1,22.9,42.9,40.0,19.7,21.4,16.3,27.7,30.7,41.0,32.7,23.4,21.5,17.7,23.3,17.6,22.0,35.3,14.0,70.2];
+const pctDalilaOutboundRaw= [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.3,1.5,null,1.8,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1.4,null,null,null,null,null,null,null];
+const pctDalilaVendasRaw  = [27.5,14.3,51.3,86.2,100.0,73.3,60.6,66.0,66.7,26.9,13.0,62.5,30.0,71.4,27.3,92.3,78.9,19.2,7.1,16.7,11.1,20.0,16.7,24.4,12.9,5.0,26.3,null,null,7.1,18.2,14.3,12.2,15.8,null,20.0,8.0,42.9,10.5,13.5,36.4,null,null,13.0,14.3,21.4,25.0,21.1,null,null,22.7,15.8,20.9,26.7,8.6,12.9,21.6,24.3,27.3];
+const pctDalilaRaw        = pctDalilaSdrRaw; // compatibilidade
 const pctSocorroRaw  = [56.4,61.6,55.6,62.4,70.0,64.5,48.9,55.6,60.3,56.0,64.6,51.6,56.6,44.1,38.5,57.4,48.4,44.1,60.8,53.5,48.5,45.8,63.1,58.3,57.4,57.3,60.1,43.1,37.5,64.8,59.2,60.3,56.1,56.2,53.4,39.7,61.3,58.2,55.1,58.0,54.3,42.6,42.2,53.9,54.0,56.0,50.9,55.2,47.3,41.7,57.8,66.2,61.6,68.3,71.1,60.4,47.6,71.5,72.1];
 const pctKyaraRaw    = [0.0,4.7,9.4,0.7,0.0,0.0,null,0.0,0.0,6.9,6.0,6.0,11.3,0.0,0.0,0.0,4.7,5.2,5.0,4.6,0.0,0.0,3.4,3.2,5.6,1.9,2.1,null,null,3.3,4.6,1.8,3.4,4.8,null,null,1.9,5.3,0.0,1.6,2.8,null,null,2.3,1.7,2.1,3.8,4.1,0.0,0.0,6.2,6.6,4.0,3.7,3.0,25.0,0.0,3.9,2.3];
 const pctMariahRaw   = [3.7,6.6,1.8,1.5,0.0,7.9,0.0,1.1,2.2,0.8,0.0,3.5,4.3,1.1,0.0,1.7,1.6,4.8,5.1,1.4,1.9,0.0,5.5,2.9,2.5,2.6,8.3,0.0,0.0,4.4,4.2,5.3,2.8,1.0,1.6,0.0,6.2,1.7,1.8,4.0,3.6,0.0,0.0,3.5,4.4,4.4,3.1,3.6,1.8,0.0,1.5,3.7,1.1,3.3,2.2,0.0,0.0,4.8,7.4];
 
 const pctEsperanza = filterPct(pctEsperanzaRaw, volEsperanza, MIN_VOL_FIN);
-const pctDalila    = filterPct(pctDalilaRaw,    volDalila,    MIN_VOL_GERAL);
+const pctDalilaSdr     = filterPct(pctDalilaSdrRaw,      volDalilaSdr,      MIN_VOL_GERAL);
+const pctDalilaOutbound= filterPct(pctDalilaOutboundRaw, volDalilaOutbound, MIN_VOL_GERAL);
+const pctDalilaVendas  = filterPct(pctDalilaVendasRaw,   volDalilaVendas,   MIN_VOL_GERAL);
+const pctDalila        = pctDalilaSdr; // compatibilidade
 const pctSocorro   = filterPct(pctSocorroRaw,   volSocorro,   MIN_VOL_GERAL);
 const pctKyara     = filterPct(pctKyaraRaw,     volKyara,     MIN_VOL_GERAL);
 const pctMariah    = filterPct(pctMariahRaw,     volMariah,    MIN_VOL_GERAL);
@@ -1649,16 +1779,20 @@ makeLineChart('lineFinDailyTransf', [
 
 // ── MARKETING: Volume diário ──
 makeLineChart('lineMktDailyVolume', [
-  ds('Dalila',  volDalila,  '#FFA300'),
-  ds('Kyara',   volKyara,   '#14B8A6'),
-  ds('Mariah',  volMariah,  '#EC4899')
+  ds('Dalila SDR',      volDalilaSdr,      '#FFA300'),
+  ds('Dalila Outbound', volDalilaOutbound, '#FB923C'),
+  ds('Dalila Vendas',   volDalilaVendas,   '#F59E0B'),
+  ds('Kyara',           volKyara,          '#14B8A6'),
+  ds('Mariah',          volMariah,         '#EC4899')
 ], false, [monthDividerPlugin]);
 
 // ── MARKETING: % Transferência diária ──
 makeLineChart('lineMktDailyTransf', [
-  ds('Dalila',  pctDalila,  '#FFA300'),
-  ds('Kyara',   pctKyara,   '#14B8A6'),
-  ds('Mariah',  pctMariah,  '#EC4899')
+  ds('Dalila SDR',      pctDalilaSdr,      '#FFA300'),
+  ds('Dalila Outbound', pctDalilaOutbound, '#FB923C'),
+  ds('Dalila Vendas',   pctDalilaVendas,   '#F59E0B'),
+  ds('Kyara',           pctKyara,          '#14B8A6'),
+  ds('Mariah',          pctMariah,         '#EC4899')
 ], true, [monthDividerPlugin]);
 
 // ══ FINANCEIRO & COBRANÇA — CHARTS ══
@@ -1906,13 +2040,15 @@ makeDestStackedChart('finDestBar',
 
 // ── MARKETING — 9 departamentos (todos os agentes que transferiram para áreas Mkt)
 makeDestStackedChart('mktDestBar',
-  ['SDR','Com. CV','Com. Sorvete','Com. Fitness','Inatividade','Com. Confecção','Com. Construção','Com. Artesanato','Com. Food'],
+  ['SDR','Com. CV','Com. Sorvete','Inatividade','Com. Confecção','Com. Construção','Com. Artesanato','Com. Food'],
   [
-    { label: 'Dalila',    fevData: [68.66,0.31,15.59,1.94,0.16,0.07,1.32,0.92,1.81], marData: [39.32,1.89,10.87,9.13,12.2,0.26,1.49,6.83,2.47] },
-    { label: 'Socorro',   fevData: [0.16,1.93,1.2,0.75,0.0,0.51,0.81,0.02,0.42],    marData: [0.21,5.02,1.35,1.11,0.13,1.16,1.46,0.08,0.63] },
-    { label: 'Kyara',     fevData: [1.58,0.19,0.53,0.12,0.07,0.02,0.06,0.26,0.28],  marData: [0.4,0.7,1.18,0.46,0.37,0.19,0.36,0.11,0.37] },
-    { label: 'Mariah',    fevData: [0.0,0.0,0.13,0.0,0.0,0.0,0.0,0.0,0.0],          marData: [0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0] },
-    { label: 'Esperanza', fevData: [0.09,0.02,0.02,0.0,0.0,0.0,0.0,0.02,0.0],       marData: [0.05,0.03,0.0,0.0,0.03,0.01,0.01,0.0,0.0] },
+    { label: 'Dalila SDR',      fevData: [71.77,1.41,12.79,0.24,0.42,1.98,0.97,0.0],  marData: [44.82,6.95,10.54,14.18,1.15,2.85,8.53,0.0] },
+    { label: 'Dalila Outbound', fevData: [1.04,0.0,0.0,0.0,0.0,0.0,0.0,0.0],          marData: [0.09,0.0,0.03,0.0,0.0,0.03,0.0,0.0] },
+    { label: 'Dalila Vendas',   fevData: [0.05,0.57,4.92,0.0,0.14,0.45,0.24,0.0],     marData: [0.12,0.03,3.43,0.0,0.06,0.3,0.0,0.0] },
+    { label: 'Socorro',         fevData: [0.16,1.93,1.2,0.0,0.51,0.81,0.02,0.42],     marData: [0.21,5.02,1.35,0.13,1.16,1.46,0.08,0.63] },
+    { label: 'Kyara',           fevData: [1.58,0.19,0.53,0.07,0.02,0.06,0.26,0.28],   marData: [0.4,0.7,1.18,0.37,0.19,0.36,0.11,0.37] },
+    { label: 'Mariah',          fevData: [0.0,0.0,0.13,0.0,0.0,0.0,0.0,0.0],          marData: [0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0] },
+    { label: 'Esperanza',       fevData: [0.09,0.02,0.02,0.0,0.0,0.0,0.02,0.0],       marData: [0.05,0.03,0.0,0.03,0.01,0.01,0.0,0.0] },
   ]
 );
 
