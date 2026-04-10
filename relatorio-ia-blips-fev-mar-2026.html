@@ -222,7 +222,7 @@
 <div class="tab-bar">
   <button class="tab-btn active" data-tab="geral">Geral</button>
   <button class="tab-btn" data-tab="cs">CS &amp; Suporte</button>
-  <button class="tab-btn" data-tab="financeiro">Financeiro &amp; Cobrança</button>
+  <button class="tab-btn" data-tab="financeiro">Financeiro &amp; Recuperação</button>
   <button class="tab-btn" data-tab="marketing">Marketing &amp; Comercial</button>
 </div>
 
@@ -334,7 +334,7 @@
       <canvas id="barTransfDest"></canvas>
     </div>
     <div class="legend" style="margin-top:14px">
-      <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Cobrança / Financeiro</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Fin. &amp; Recuperação</div>
       <div class="legend-item"><div class="legend-dot" style="background:#FFA300"></div>Comercial / SDR</div>
       <div class="legend-item"><div class="legend-dot" style="background:#8B5CF6"></div>CS & Suporte</div>
       <div class="legend-item"><div class="legend-dot" style="background:#D1D5DB"></div>Outros</div>
@@ -591,6 +591,43 @@
   </div>
 
   <div class="section">
+    <div class="section-title">Comparativo por Pilar — Financeiro &amp; Recuperação</div>
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <h3>Comparativo mensal por pilar — Fev vs Mar</h3>
+        <div class="chart-sub">Sem IA vs Via Esperanza · cada pilar com dois meses lado a lado · passe o mouse para detalhes</div>
+        <div class="chart-wrap" style="height:300px">
+          <canvas id="barFinGrupos"></canvas>
+        </div>
+        <div class="legend" style="margin-top:12px">
+          <div class="legend-item"><div class="legend-dot" style="background:#4B5563"></div>Sem IA — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#14B8A6"></div>Via Esperanza — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#9CA3AF"></div>Sem IA — Mar</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#5EEAD4"></div>Via Esperanza — Mar</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Papel da Esperanza como porta de entrada</h3>
+        <div class="chart-sub">% dos protocolos de cada pilar que passaram pela Esperanza antes</div>
+        <div class="chart-wrap" style="height:300px">
+          <canvas id="barEsperanzaGateway"></canvas>
+        </div>
+        <div class="legend" style="margin-top:12px">
+          <div class="legend-item"><div class="legend-dot" style="background:#8B5CF6"></div>Via Esperanza</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#E5E7EB"></div>Chegou direto</div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-top:28px">
+      <h3>% de transferências por departamento de destino — Fev vs Mar</h3>
+      <div class="chart-sub">Empilhado por agente de origem · barra sólida = Fev · translúcida = Mar</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="finDestBar"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
     <div class="section-title">Contenção vs Transferência — Esperanza</div>
     <div class="chart-grid-2">
       <div class="chart-card">
@@ -614,17 +651,10 @@
         </div>
       </div>
     </div>
-    <div class="chart-full" style="margin-top:28px">
-      <h3>% de transferências por departamento de destino — Fev vs Mar</h3>
-      <div class="chart-sub">Empilhado por agente de origem · barra sólida = Fev · translúcida = Mar</div>
-      <div class="chart-wrap" style="height:260px">
-        <canvas id="finDestBar"></canvas>
-      </div>
-    </div>
   </div>
 
   <div class="section">
-    <div class="section-title">Evolução Diária — Financeiro &amp; Cobrança</div>
+    <div class="section-title">Evolução Diária — Financeiro &amp; Recuperação</div>
     <div class="chart-full" style="margin-bottom:24px">
       <h3>Volume diário de atendimentos — Esperanza</h3>
       <div class="chart-sub">Fevereiro e março 2026 · linha vertical separa os meses</div>
@@ -640,7 +670,7 @@
       </div>
     </div>
     <div class="chart-full" style="margin-top:24px">
-      <h3>Transferências diárias por departamento de destino — Financeiro &amp; Cobrança</h3>
+      <h3>Transferências diárias por departamento de destino — Financeiro &amp; Recuperação</h3>
       <div class="chart-sub">% diário de transferências recebidas por cada departamento vindo da Esperanza · linha vertical separa os meses</div>
       <div class="chart-wrap" style="height:300px">
         <canvas id="finDestLine"></canvas>
@@ -648,7 +678,7 @@
     </div>
   </div>
   <div class="section">
-    <div class="section-title">Perfil do Agente — Financeiro &amp; Cobrança</div>
+    <div class="section-title">Perfil do Agente — Financeiro &amp; Recuperação</div>
     <div class="agents-grid">
 
       <!-- ESPERANZA -->
@@ -657,7 +687,7 @@
           <div class="agent-avatar" style="background:#EF4444">E</div>
           <div>
             <div class="agent-name">Esperanza</div>
-            <div class="agent-role">Cobrança · IA - Financeiro</div>
+            <div class="agent-role">Financeiro &amp; Recuperação · IA - Financeiro</div>
           </div>
         </div>
         <div class="agent-stats">
@@ -687,10 +717,11 @@
         </div>
         <div class="agent-destinos">
           <h5>Transfere principalmente para</h5>
-          <div class="dest-row"><div class="dest-label">Cobrança</div><div class="dest-track"><div class="dest-fill" style="width:100%;background:#EF4444"></div></div><div class="dest-num">1.936</div></div>
-          <div class="dest-row"><div class="dest-label">Suporte Técnico CV</div><div class="dest-track"><div class="dest-fill" style="width:28%;background:#EF4444"></div></div><div class="dest-num">538</div></div>
-          <div class="dest-row"><div class="dest-label">FIDC</div><div class="dest-track"><div class="dest-fill" style="width:27%;background:#EF4444"></div></div><div class="dest-num">527</div></div>
-          <div class="dest-row"><div class="dest-label">Liquidação Financeira</div><div class="dest-track"><div class="dest-fill" style="width:16%;background:#EF4444"></div></div><div class="dest-num">305</div></div>
+          <div class="dest-row"><div class="dest-label">Cobrança</div><div class="dest-track"><div class="dest-fill" style="width:100%;background:#EF4444"></div></div><div class="dest-num">1.776</div></div>
+          <div class="dest-row"><div class="dest-label">FIDC</div><div class="dest-track"><div class="dest-fill" style="width:28%;background:#EF4444"></div></div><div class="dest-num">497</div></div>
+          <div class="dest-row"><div class="dest-label">Financeiro Blips</div><div class="dest-track"><div class="dest-fill" style="width:16%;background:#EF4444"></div></div><div class="dest-num">281</div></div>
+          <div class="dest-row"><div class="dest-label">Liquidação Financeira</div><div class="dest-track"><div class="dest-fill" style="width:16%;background:#EF4444"></div></div><div class="dest-num">278</div></div>
+          <div class="dest-row"><div class="dest-label">Retirada de Equipamentos</div><div class="dest-track"><div class="dest-fill" style="width:7%;background:#EF4444"></div></div><div class="dest-num">119</div></div>
         </div>
       </div>
 
@@ -736,6 +767,43 @@
   </div>
 
   <div class="section">
+    <div class="section-title">Comparativo por Pilar — Marketing &amp; Comercial</div>
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <h3>Comparativo mensal por pilar — Fev vs Mar</h3>
+        <div class="chart-sub">Sem IA vs Via IAs Comerciais · cada pilar com dois meses lado a lado · passe o mouse para detalhes</div>
+        <div class="chart-wrap" style="height:300px">
+          <canvas id="barMktGrupos"></canvas>
+        </div>
+        <div class="legend" style="margin-top:12px">
+          <div class="legend-item"><div class="legend-dot" style="background:#4B5563"></div>Sem IA — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#14B8A6"></div>Via IA — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#9CA3AF"></div>Sem IA — Mar</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#5EEAD4"></div>Via IA — Mar</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Papel das IAs como porta de entrada</h3>
+        <div class="chart-sub">% dos protocolos de cada pilar que passaram por uma IA antes</div>
+        <div class="chart-wrap" style="height:300px">
+          <canvas id="barMktGateway"></canvas>
+        </div>
+        <div class="legend" style="margin-top:12px">
+          <div class="legend-item"><div class="legend-dot" style="background:#8B5CF6"></div>Via IA</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#E5E7EB"></div>Chegou direto</div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-top:28px">
+      <h3>% de transferências por departamento de destino — Fev vs Mar</h3>
+      <div class="chart-sub">Empilhado por agente de origem · barra sólida = Fev · translúcida = Mar</div>
+      <div class="chart-wrap" style="height:300px">
+        <canvas id="mktDestBar"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
     <div class="section-title">Volume por Agente — Marketing &amp; Comercial</div>
     <div class="chart-grid-2">
       <div class="chart-card">
@@ -757,13 +825,6 @@
         <div class="chart-wrap" style="height:280px">
           <canvas id="barMktContencao"></canvas>
         </div>
-      </div>
-    </div>
-    <div class="chart-full" style="margin-top:28px">
-      <h3>% de transferências por departamento de destino — Fev vs Mar</h3>
-      <div class="chart-sub">Empilhado por agente de origem · barra sólida = Fev · translúcida = Mar</div>
-      <div class="chart-wrap" style="height:300px">
-        <canvas id="mktDestBar"></canvas>
       </div>
     </div>
   </div>
@@ -1133,7 +1194,7 @@ new Chart(document.getElementById('barStackedFevMar'), {
 // Nota: routing steps > unique protocols pois um protocolo pode passar por vários depts
 const tdAgentes  = ['Esperanza','Dalila','Socorro','Kyara','Mariah','Clara','Luna'];
 const tdUniq     = [3047, 8283, 16405, 514, 183, 502, 115]; // protocolos únicos transferidos
-const tdCobr     = [3476,  258,  4510,  24,   5,   5,   9]; // Cobrança / Financeiro
+const tdCobr     = [3476,  258,  4510,  24,   5,   5,   9]; // Fin. &amp; Recuperação
 const tdCom      = [ 316, 8163,  7176, 567,  20,  15,  13]; // Comercial / SDR
 const tdCS       = [1738, 1158, 23660, 116, 294, 700, 186]; // CS & Suporte
 const tdOutros   = [ 154,   22,   129,   1,   2,   0,   0]; // Outros
@@ -1146,7 +1207,7 @@ new Chart(document.getElementById('barTransfDest'), {
   data: {
     labels: tdAgentes,
     datasets: [
-      { label: 'Cobrança / Financeiro', data: tdPct(tdCobr),   backgroundColor: '#EF4444', stack: 's' },
+      { label: 'Fin. &amp; Recuperação', data: tdPct(tdCobr),   backgroundColor: '#EF4444', stack: 's' },
       { label: 'Comercial / SDR',       data: tdPct(tdCom),    backgroundColor: '#FFA300', stack: 's' },
       { label: 'CS & Suporte',          data: tdPct(tdCS),     backgroundColor: '#8B5CF6', stack: 's' },
       { label: 'Outros',                data: tdPct(tdOutros), backgroundColor: '#D1D5DB', stack: 's' }
@@ -1288,6 +1349,196 @@ new Chart(document.getElementById('barSocorroGateway'), {
             return `  ${c.dataset.label}: ${c.raw}% (${abs.toLocaleString('pt-BR')})`;
           },
           footer: (i) => `  Total: ${sTotal[i[0].dataIndex].toLocaleString('pt-BR')}`
+        },
+        footerFont: { weight: 'bold' }, footerColor: '#FFA300'
+      }
+    },
+    scales: {
+      x: { stacked: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#F3F4F6' } },
+      y: { stacked: true, grid: { display: false } }
+    }
+  }
+});
+
+// ══ FINANCEIRO — Comparativo por Pilar ══
+const finGrupos      = ['Esperanza (IA)', 'Cobrança', 'FIDC', 'Fallback Cob.', 'Fin. Blips', 'Liquidação Fin.', 'Retirada Eq.'];
+const finGruposShort = ['Esperanza (IA)', 'Cobrança', 'FIDC', 'Fallback Cob.', 'Fin. Blips', 'Liquidação Fin.', 'Retirada Eq.'];
+const finFevSemIA  = [    0,  919,  789,   0, 1220,  524,  119];
+const finFevViaIA  = [20981, 1047,  202,   0,   67,   84,   18];
+const finMarSemIA  = [    0, 1095, 1466,   5, 1913, 1503,  498];
+const finMarViaIA  = [20371,  729,  295, 183,  214,  194,  101];
+const finFevTotais = finFevSemIA.map((v,i) => v + finFevViaIA[i]);
+const finMarTotais = finMarSemIA.map((v,i) => v + finMarViaIA[i]);
+
+new Chart(document.getElementById('barFinGrupos'), {
+  type: 'bar',
+  data: {
+    labels: finGrupos,
+    datasets: [
+      { label: 'Sem IA — Fev',         data: finFevSemIA, backgroundColor: '#4B5563', stack: 'fev' },
+      { label: 'Via Esperanza — Fev',  data: finFevViaIA, backgroundColor: '#14B8A6', stack: 'fev' },
+      { label: 'Sem IA — Mar',         data: finMarSemIA, backgroundColor: '#9CA3AF', stack: 'mar' },
+      { label: 'Via Esperanza — Mar',  data: finMarViaIA, backgroundColor: '#5EEAD4', stack: 'mar' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        mode: 'index', intersect: false,
+        callbacks: {
+          title(items) { return finGruposShort[items[0].dataIndex]; },
+          label(ctx) {
+            const idx = ctx.dataIndex, v = ctx.raw ?? 0;
+            if (v === 0) return null;
+            const isFev = ctx.dataset.stack === 'fev';
+            const tot   = isFev ? finFevTotais[idx] : finMarTotais[idx];
+            const pct   = tot > 0 ? (v / tot * 100).toFixed(1) : '0';
+            return `  ${isFev ? 'Fev' : 'Mar'} · ${ctx.dataset.label.split('—')[0].trim()}: ${v.toLocaleString('pt-BR')} (${pct}%)`;
+          },
+          footer(items) {
+            const idx = items[0].dataIndex;
+            const varPct = finFevTotais[idx] > 0
+              ? ((finMarTotais[idx] - finFevTotais[idx]) / finFevTotais[idx] * 100).toFixed(1) : '0';
+            return [`  Total Fev: ${finFevTotais[idx].toLocaleString('pt-BR')}`,
+                    `  Total Mar: ${finMarTotais[idx].toLocaleString('pt-BR')}  (${varPct >= 0 ? '+' : ''}${varPct}%)`];
+          }
+        },
+        footerFont: { weight: 'bold' }, footerColor: '#FFA300'
+      }
+    },
+    scales: {
+      x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 30 } },
+      y: { stacked: true, ticks: { callback: v => v.toLocaleString('pt-BR') }, grid: { color: '#F3F4F6' } }
+    }
+  }
+});
+
+// Fin gateway
+const finGwLabels  = ['Cobrança', 'FIDC', 'Fallback Cob.', 'Fin. Blips', 'Liquidação Fin.', 'Retirada Eq.'];
+const finGwVia     = [1776, 497, 183, 281, 278, 119];
+const finGwDireto  = [2014, 2255,   5, 3133, 2027, 617];
+const finGwTotal   = finGwVia.map((v,i) => v + finGwDireto[i]);
+const finGwPctVia  = finGwVia.map((v,i) => +(v / finGwTotal[i] * 100).toFixed(1));
+const finGwPctDir  = finGwDireto.map((v,i) => +(v / finGwTotal[i] * 100).toFixed(1));
+
+new Chart(document.getElementById('barEsperanzaGateway'), {
+  type: 'bar',
+  data: { labels: finGwLabels, datasets: [
+    { label: 'Via Esperanza', data: finGwPctVia,  backgroundColor: '#8B5CF6' },
+    { label: 'Chegou direto', data: finGwPctDir,  backgroundColor: '#E5E7EB' }
+  ]},
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        mode: 'index', intersect: false,
+        callbacks: {
+          title: (i) => finGwLabels[i[0].dataIndex],
+          label: (c) => {
+            const idx = c.dataIndex, isVia = c.datasetIndex === 0;
+            return `  ${c.dataset.label}: ${c.raw}% (${(isVia ? finGwVia : finGwDireto)[idx].toLocaleString('pt-BR')})`;
+          },
+          footer: (i) => `  Total: ${finGwTotal[i[0].dataIndex].toLocaleString('pt-BR')}`
+        },
+        footerFont: { weight: 'bold' }, footerColor: '#FFA300'
+      }
+    },
+    scales: {
+      x: { stacked: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#F3F4F6' } },
+      y: { stacked: true, grid: { display: false } }
+    }
+  }
+});
+
+// ══ MARKETING — Comparativo por Pilar ══
+const mktGrupos      = ['IA (retidos)', 'SDR', 'Comercial CV', 'Com. Sorvete', 'Outras Comerc.', 'Inatividade'];
+const mktGruposShort = ['IA (retidos)', 'SDR', 'Comercial CV', 'Com. Sorvete', 'Outras Comerc.', 'Inatividade'];
+const mktFevSemIA  = [    0,  240, 1652, 1006, 3324,  366];
+const mktFevViaIA  = [20818, 3096,  122,  770,  436,   12];
+const mktMarSemIA  = [    0,  103, 2917, 2200, 7070,  195];
+const mktMarViaIA  = [27059, 1488,  310,  496, 1019,  472];
+const mktFevTotais = mktFevSemIA.map((v,i) => v + mktFevViaIA[i]);
+const mktMarTotais = mktMarSemIA.map((v,i) => v + mktMarViaIA[i]);
+
+new Chart(document.getElementById('barMktGrupos'), {
+  type: 'bar',
+  data: {
+    labels: mktGrupos,
+    datasets: [
+      { label: 'Sem IA — Fev',   data: mktFevSemIA, backgroundColor: '#4B5563', stack: 'fev' },
+      { label: 'Via IA — Fev',   data: mktFevViaIA, backgroundColor: '#14B8A6', stack: 'fev' },
+      { label: 'Sem IA — Mar',   data: mktMarSemIA, backgroundColor: '#9CA3AF', stack: 'mar' },
+      { label: 'Via IA — Mar',   data: mktMarViaIA, backgroundColor: '#5EEAD4', stack: 'mar' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        mode: 'index', intersect: false,
+        callbacks: {
+          title(items) { return mktGruposShort[items[0].dataIndex]; },
+          label(ctx) {
+            const idx = ctx.dataIndex, v = ctx.raw ?? 0;
+            if (v === 0) return null;
+            const isFev = ctx.dataset.stack === 'fev';
+            const tot   = isFev ? mktFevTotais[idx] : mktMarTotais[idx];
+            const pct   = tot > 0 ? (v / tot * 100).toFixed(1) : '0';
+            return `  ${isFev ? 'Fev' : 'Mar'} · ${ctx.dataset.label.split('—')[0].trim()}: ${v.toLocaleString('pt-BR')} (${pct}%)`;
+          },
+          footer(items) {
+            const idx = items[0].dataIndex;
+            const varPct = mktFevTotais[idx] > 0
+              ? ((mktMarTotais[idx] - mktFevTotais[idx]) / mktFevTotais[idx] * 100).toFixed(1) : '0';
+            return [`  Total Fev: ${mktFevTotais[idx].toLocaleString('pt-BR')}`,
+                    `  Total Mar: ${mktMarTotais[idx].toLocaleString('pt-BR')}  (${varPct >= 0 ? '+' : ''}${varPct}%)`];
+          }
+        },
+        footerFont: { weight: 'bold' }, footerColor: '#FFA300'
+      }
+    },
+    scales: {
+      x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 30 } },
+      y: { stacked: true, ticks: { callback: v => v.toLocaleString('pt-BR') }, grid: { color: '#F3F4F6' } }
+    }
+  }
+});
+
+// Mkt gateway
+const mktGwLabels = ['SDR', 'Comercial CV', 'Com. Sorvete', 'Outras Comerc.', 'Inatividade'];
+const mktGwVia    = [4584, 432, 1266, 1455, 484];
+const mktGwDireto = [ 343, 4569, 3206, 10394, 561];
+const mktGwTotal  = mktGwVia.map((v,i) => v + mktGwDireto[i]);
+const mktGwPctVia = mktGwVia.map((v,i) => +(v / mktGwTotal[i] * 100).toFixed(1));
+const mktGwPctDir = mktGwDireto.map((v,i) => +(v / mktGwTotal[i] * 100).toFixed(1));
+
+new Chart(document.getElementById('barMktGateway'), {
+  type: 'bar',
+  data: { labels: mktGwLabels, datasets: [
+    { label: 'Via IA',        data: mktGwPctVia, backgroundColor: '#8B5CF6' },
+    { label: 'Chegou direto', data: mktGwPctDir, backgroundColor: '#E5E7EB' }
+  ]},
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        mode: 'index', intersect: false,
+        callbacks: {
+          title: (i) => mktGwLabels[i[0].dataIndex],
+          label: (c) => {
+            const idx = c.dataIndex, isVia = c.datasetIndex === 0;
+            return `  ${c.dataset.label}: ${c.raw}% (${(isVia ? mktGwVia : mktGwDireto)[idx].toLocaleString('pt-BR')})`;
+          },
+          footer: (i) => `  Total: ${mktGwTotal[i[0].dataIndex].toLocaleString('pt-BR')}`
         },
         footerFont: { weight: 'bold' }, footerColor: '#FFA300'
       }
@@ -1516,11 +1767,11 @@ new Chart(document.getElementById('barEsperanzaFevMar'), {
 new Chart(document.getElementById('barEsperanzaDest'), {
   type: 'bar',
   data: {
-    labels: ['Cobrança', 'Suporte Técnico CV', 'FIDC', 'Liquidação Financeira'],
+    labels: ['Cobrança', 'FIDC', 'Financeiro Blips', 'Liquidação Financeira', 'Fallback Cobrança', 'Retirada Equip.'],
     datasets: [{
       label: 'Transferências',
-      data: [1936, 538, 527, 305],
-      backgroundColor: ['#EF4444','#F97316','#EF4444','#F97316'],
+      data: [1776, 497, 281, 278, 183, 119],
+      backgroundColor: ['#EF4444','#F97316','#EF4444','#F97316','#EF4444','#F97316'],
       borderRadius: 4
     }]
   },
@@ -1872,13 +2123,13 @@ makeDestStackedChart('csDestBar',
 
 // ── FINANCEIRO — 5 departamentos (todos os agentes que transferiram para áreas Fin)
 makeDestStackedChart('finDestBar',
-  ['Cobrança','FIDC','Fallback Cob.','Fin. Blips','Liquidação Fin.'],
+  ['Cobrança','FIDC','Fallback Cob.','Fin. Blips','Liquidação Fin.','Retirada de Eq.'],
   [
-    { label: 'Socorro',   fevData: [6.54,0.75,0.0,0.36,0.57],   marData: [7.38,0.68,0.08,10.55,0.77] },
-    { label: 'Dalila',    fevData: [0.17,0.44,0.0,0.01,0.64],   marData: [0.21,0.76,0.0,0.4,0.35] },
-    { label: 'Esperanza', fevData: [86.7,0.78,0.0,0.0,2.73],    marData: [44.45,15.14,15.16,1.19,2.71] },
-    { label: 'Kyara',     fevData: [0.08,0.14,0.0,0.0,0.0],     marData: [0.0,0.0,0.0,0.01,0.0] },
-    { label: 'Luna',      fevData: [0.08,0.0,0.0,0.0,0.0],      marData: [0.07,0.0,0.0,0.0,0.0] },
+    { label: 'Socorro',   fevData: [10.21,7.65,0.0,31.71,2.63,0.58],  marData: [9.72,4.55,0.14,34.64,5.6,1.15] },
+    { label: 'Dalila',    fevData: [0.64,0.73,0.0,1.16,0.8,0.21],     marData: [0.45,0.5,0.0,1.32,0.45,0.24] },
+    { label: 'Esperanza', fevData: [32.02,6.18,0.0,2.05,2.57,0.55],   marData: [17.45,7.06,4.38,5.12,4.64,2.42] },
+    { label: 'Kyara',     fevData: [0.0,0.0,0.0,0.0,0.0,0.0],         marData: [0.0,0.0,0.0,0.0,0.0,0.0] },
+    { label: 'Luna',      fevData: [0.06,0.0,0.0,0.12,0.0,0.0],       marData: [0.05,0.0,0.0,0.0,0.0,0.0] },
   ]
 );
 
