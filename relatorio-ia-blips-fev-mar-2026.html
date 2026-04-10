@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório de IAs Blips — Hyperflow | Fev–Mar 2026</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --blips: #FFA300;
+    --blips-light: #FFF3DC;
+    --blips-dark: #CC8200;
+    --bg: #F7F8FA;
+    --card: #FFFFFF;
+    --text: #1A1A2E;
+    --text-muted: #6B7280;
+    --border: #E5E7EB;
+    --green: #10B981;
+    --red: #EF4444;
+    --blue: #3B82F6;
+    --purple: #8B5CF6;
+    --teal: #14B8A6;
+    --pink: #EC4899;
+    --indigo: #6366F1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+    padding: 32px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 4px solid var(--blips);
+  }
+  .header-left { display: flex; align-items: center; gap: 20px; }
+  .logo-wrap { background: var(--blips); border-radius: 12px; padding: 8px; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .header h1 { color: #fff; font-size: 22px; font-weight: 700; }
+  .header p { color: #94A3B8; font-size: 14px; margin-top: 3px; }
+  .header-badge { background: rgba(255,163,0,0.15); border: 1px solid var(--blips); color: var(--blips); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+
+  /* LAYOUT */
+  .container { max-width: 1280px; margin: 0 auto; padding: 32px 24px; }
+  .section-title {
+    font-size: 18px; font-weight: 700; color: var(--text); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::before { content: ''; display: block; width: 4px; height: 20px; background: var(--blips); border-radius: 2px; }
+  .section { margin-bottom: 40px; }
+
+  /* BIG NUMBERS */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
+  .kpi-card {
+    background: var(--card); border-radius: 14px; padding: 24px;
+    border: 1px solid var(--border); position: relative; overflow: hidden;
+    transition: transform 0.2s;
+  }
+  .kpi-card:hover { transform: translateY(-2px); }
+  .kpi-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+  .kpi-card.orange::after { background: var(--blips); }
+  .kpi-card.green::after { background: var(--green); }
+  .kpi-card.blue::after { background: var(--blue); }
+  .kpi-card.purple::after { background: var(--purple); }
+  .kpi-label { font-size: 12px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .kpi-value { font-size: 38px; font-weight: 800; letter-spacing: -1px; }
+  .kpi-card.orange .kpi-value { color: var(--blips-dark); }
+  .kpi-card.green  .kpi-value { color: #059669; }
+  .kpi-card.blue   .kpi-value { color: #2563EB; }
+  .kpi-card.purple .kpi-value { color: #7C3AED; }
+  .kpi-sub { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+  .kpi-delta { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; margin-top: 8px; padding: 3px 8px; border-radius: 6px; }
+  .kpi-delta.pos { background: #D1FAE5; color: #059669; }
+  .kpi-delta.neg { background: #FEE2E2; color: #DC2626; }
+  .kpi-delta.neu { background: #F3F4F6; color: #6B7280; }
+
+  /* GRID CHARTS */
+  .chart-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+  .chart-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 40px; }
+  .chart-card {
+    background: var(--card); border-radius: 14px; padding: 24px;
+    border: 1px solid var(--border);
+  }
+  .chart-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+  .chart-card .chart-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+  .chart-wrap { position: relative; }
+
+  /* AGENT CARDS */
+  .agents-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+  .agent-card {
+    background: var(--card); border-radius: 14px; padding: 24px;
+    border: 1px solid var(--border); transition: box-shadow 0.2s;
+  }
+  .agent-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .agent-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .agent-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; color: white; flex-shrink: 0;
+  }
+  .agent-name { font-size: 18px; font-weight: 800; }
+  .agent-role { font-size: 11px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.4px; }
+  .agent-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .stat-box { background: var(--bg); border-radius: 10px; padding: 12px; }
+  .stat-box .s-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); font-weight: 600; }
+  .stat-box .s-val { font-size: 22px; font-weight: 800; color: var(--text); margin-top: 2px; }
+  .stat-box .s-sub { font-size: 11px; color: var(--text-muted); }
+  .agent-bar-wrap { margin-bottom: 12px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
+  .bar-track { background: var(--bg); border-radius: 4px; height: 8px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s; }
+  .agent-tag { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 600; margin-top: 4px; }
+  .agent-tag.ok  { background: #D1FAE5; color: #059669; }
+  .agent-tag.warn{ background: #FEF3C7; color: #D97706; }
+  .agent-tag.bad { background: #FEE2E2; color: #DC2626; }
+  .agent-destinos { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 12px; }
+  .agent-destinos h5 { font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; letter-spacing: 0.4px; }
+  .dest-row { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .dest-label { font-size: 11px; color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dest-track { background: var(--bg); border-radius: 3px; height: 6px; width: 80px; overflow: hidden; }
+  .dest-fill { height: 100%; border-radius: 3px; }
+  .dest-num { font-size: 11px; color: var(--text-muted); font-weight: 600; min-width: 36px; text-align: right; }
+  .evol-row { display: flex; gap: 8px; margin-top: 10px; }
+  .evol-item { background: var(--bg); border-radius: 8px; padding: 8px 12px; flex: 1; text-align: center; }
+  .evol-item .e-month { font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; }
+  .evol-item .e-val { font-size: 15px; font-weight: 800; color: var(--text); }
+  .evol-item .e-rate { font-size: 11px; color: var(--text-muted); }
+
+  /* FULL WIDTH CHART */
+  .chart-full { background: var(--card); border-radius: 14px; padding: 24px; border: 1px solid var(--border); margin-bottom: 40px; }
+  .chart-full h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .chart-full .chart-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 16px; }
+
+  /* INSIGHTS */
+  .insights-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 40px; }
+  .insight-card { background: var(--card); border-radius: 14px; padding: 20px; border: 1px solid var(--border); display: flex; gap: 14px; align-items: flex-start; }
+  .insight-icon { font-size: 24px; flex-shrink: 0; }
+  .insight-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .insight-text { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+  .insight-card.highlight { border-color: var(--blips); background: #FFFBF0; }
+
+  /* LEGEND */
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 24px; color: var(--text-muted); font-size: 12px; border-top: 1px solid var(--border); margin-top: 20px; }
+
+  /* TOOLTIP CUSTOM */
+  .csat-note { font-size: 11px; color: var(--text-muted); font-style: italic; margin-top: 4px; }
+
+  /* CLASSIFICATION LIST */
+  .class-list { display: flex; flex-direction: column; gap: 7px; }
+  .class-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: var(--bg); border-radius: 8px; }
+  .class-name { font-size: 12px; color: var(--text); }
+  .class-num  { font-size: 12px; font-weight: 700; color: var(--text-muted); white-space: nowrap; margin-left: 8px; }
+
+  /* TABS */
+  .tab-bar {
+    background: var(--card);
+    border-bottom: 2px solid var(--border);
+    display: flex;
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    padding: 16px 22px;
+    transition: color 0.18s, border-color 0.18s;
+    white-space: nowrap;
+    margin-bottom: -2px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { border-bottom-color: var(--blips); color: var(--blips); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  @media (max-width: 1024px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .chart-grid-2 { grid-template-columns: 1fr; }
+    .agents-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .agents-grid { grid-template-columns: 1fr; }
+    .header { flex-direction: column; gap: 12px; text-align: center; padding: 24px; }
+    .tab-bar { padding: 0 8px; overflow-x: auto; }
+    .tab-btn { padding: 14px 12px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo-wrap">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 543 543" width="36" height="36">
+        <path d="M 245 11 L 244 12 L 224 14 L 198 20 L 170 30 L 147 41 L 135 48 L 108 67 L 93 80 L 73 101 L 59 119 L 45 141 L 32 167 L 23 191 L 16 218 L 16 223 L 13 236 L 13 244 L 12 245 L 12 259 L 11 260 L 12 296 L 13 297 L 15 318 L 21 344 L 31 372 L 43 397 L 60 424 L 70 437 L 106 473 L 119 483 L 146 500 L 171 512 L 196 521 L 226 528 L 249 530 L 250 531 L 292 531 L 293 530 L 302 530 L 342 522 L 373 511 L 399 498 L 421 484 L 439 470 L 461 449 L 477 430 L 499 396 L 511 371 L 521 342 L 526 321 L 528 302 L 529 301 L 529 291 L 530 290 L 529 241 L 528 240 L 526 221 L 520 196 L 512 173 L 497 142 L 481 117 L 471 104 L 443 75 L 431 65 L 398 43 L 369 29 L 340 19 L 318 14 L 297 12 L 296 11 L 283 11 L 282 10 Z" fill="#FFFFFF"/>
+        <path d="M 257 269 L 240 277 L 232 284 L 226 292 L 222 300 L 219 311 L 219 328 L 225 345 L 230 352 L 238 360 L 250 367 L 260 370 L 267 370 L 268 371 L 280 370 L 290 367 L 299 362 L 309 353 L 314 346 L 318 338 L 321 326 L 320 307 L 317 298 L 311 288 L 297 275 L 289 271 L 278 268 Z M 268 293 L 277 294 L 286 299 L 292 306 L 296 317 L 295 326 L 291 334 L 284 341 L 274 345 L 265 345 L 256 341 L 248 333 L 244 323 L 245 312 L 249 304 L 255 298 L 263 294 Z M 162 93 L 156 96 L 150 102 L 148 107 L 148 339 L 149 340 L 150 351 L 156 371 L 164 387 L 177 405 L 192 420 L 201 427 L 224 440 L 242 446 L 252 448 L 259 448 L 260 449 L 295 448 L 309 445 L 323 440 L 340 431 L 356 419 L 368 407 L 379 393 L 390 373 L 394 362 L 398 345 L 399 307 L 394 283 L 389 270 L 376 248 L 366 236 L 347 219 L 327 207 L 308 200 L 294 197 L 286 197 L 285 196 L 250 196 L 241 200 L 237 204 L 234 210 L 233 220 L 237 231 L 242 236 L 248 239 L 287 240 L 305 245 L 321 254 L 338 270 L 345 280 L 353 298 L 356 312 L 356 332 L 352 350 L 341 371 L 325 388 L 315 395 L 303 401 L 281 406 L 266 406 L 247 402 L 226 391 L 209 375 L 202 365 L 196 353 L 191 334 L 191 111 L 190 106 L 186 99 L 179 94 L 170 92 Z" fill="#FFA300" fill-rule="evenodd"/>
+      </svg>
+    </div>
+    <div>
+      <h1>Performance dos Agentes de IA — Hyperflow</h1>
+      <p>Análise comparativa Fevereiro vs Março 2026 · Reunião Vinicius × Thaise</p>
+    </div>
+  </div>
+  <div class="header-badge">Fev–Mar 2026</div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="geral">Geral</button>
+  <button class="tab-btn" data-tab="cs">CS &amp; Suporte</button>
+  <button class="tab-btn" data-tab="financeiro">Financeiro &amp; Cobrança</button>
+  <button class="tab-btn" data-tab="marketing">Marketing &amp; Comercial</button>
+</div>
+
+<!-- ══ TAB: GERAL ══ -->
+<div id="tab-geral" class="tab-content active">
+<div class="container">
+
+  <!-- ── SEÇÃO 1: BIG NUMBERS ── -->
+  <div class="section">
+    <div class="section-title">Visão Geral do Período</div>
+    <div class="kpi-grid">
+      <div class="kpi-card orange">
+        <div class="kpi-label">Total de Atendimentos</div>
+        <div class="kpi-value">177,957</div>
+        <div class="kpi-sub">Fev: 81.323 · Mar: 96.634</div>
+        <span class="kpi-delta pos">▲ +18,8% Fev→Mar</span>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Passaram por Agente IA</div>
+        <div class="kpi-value">126,096</div>
+        <div class="kpi-sub">70,9% do total de atendimentos</div>
+        <span class="kpi-delta neu">Fev 72,4% · Mar 69,5%</span>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Taxa de Contenção IA</div>
+        <div class="kpi-value">77,6%</div>
+        <div class="kpi-sub">97.819 resolvidos sem humano</div>
+        <span class="kpi-delta neu">Fev 77,5% · Mar 77,6%</span>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-label">Transferidos IA → Humano</div>
+        <div class="kpi-value">28,277</div>
+        <div class="kpi-sub">22,4% dos que viram IA</div>
+        <span class="kpi-delta neu">Fev 13.221 · Mar 15.056</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SEÇÃO 2: DISTRIBUIÇÃO DOS ATENDIMENTOS ── -->
+  <div class="section">
+    <div class="section-title">Distribuição dos Atendimentos no Hyperflow</div>
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <h3>Composição total do período</h3>
+        <div class="chart-sub">177.957 atendimentos · Fev + Mar 2026</div>
+        <div class="chart-wrap" style="height:280px">
+          <canvas id="donutTotal"></canvas>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#FFA300"></div>Via Agente IA (70,9%)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#3B82F6"></div>Apenas Humano (12,7%)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#9CA3AF"></div>Tel. Corporativo (11,9%)</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#D1D5DB"></div>Aviso Automático (4,5%)</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Evolução mensal por categoria</h3>
+        <div class="chart-sub">Fevereiro vs Março · volume absoluto</div>
+        <div class="chart-wrap" style="height:280px">
+          <canvas id="barMensal"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SEÇÃO 3: IA — CONTENÇÃO × TRANSFERÊNCIA ── -->
+  <div class="section">
+    <div class="section-title">Contenção vs Transferência por Agente IA</div>
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <h3>Volume retido vs transferido — período total</h3>
+        <div class="chart-sub">Fevereiro + Março 2026 · passe o mouse para ver detalhes</div>
+        <div class="chart-wrap" style="height:320px">
+          <canvas id="barStackedAgents"></canvas>
+        </div>
+        <div class="legend" style="margin-top:12px">
+          <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>Retido pela IA</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Transferido para humano</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Comparativo mensal — Fevereiro vs Março</h3>
+        <div class="chart-sub">Retido vs transferido por agente em cada mês · passe o mouse para ver detalhes</div>
+        <div class="chart-wrap" style="height:320px">
+          <canvas id="barStackedFevMar"></canvas>
+        </div>
+        <div class="legend" style="margin-top:12px">
+          <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>Retido — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#34D399"></div>Retido — Mar</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Transf. — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FCA5A5"></div>Transf. — Mar</div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-top:28px">
+      <h3>% de transferências por departamento de destino — Fev vs Mar</h3>
+      <div class="chart-sub">Empilhado por agente de origem · barra sólida = Fev · translúcida = Mar</div>
+      <div class="chart-wrap" style="height:300px">
+        <canvas id="geralDestBar"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Destinos das transferências -->
+  <div class="chart-full" style="margin-bottom:40px">
+    <h3>Para onde cada agente IA transfere</h3>
+    <div class="chart-sub">Distribuição proporcional dos roteamentos por categoria de destino · passe o mouse para ver volumes</div>
+    <div class="chart-wrap" style="height:300px">
+      <canvas id="barTransfDest"></canvas>
+    </div>
+    <div class="legend" style="margin-top:14px">
+      <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Cobrança / Financeiro</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FFA300"></div>Comercial / SDR</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#8B5CF6"></div>CS & Suporte</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#D1D5DB"></div>Outros</div>
+    </div>
+  </div>
+
+  <!-- ── EVOLUÇÃO DIÁRIA (aba Geral) ── -->
+  <div class="section">
+    <div class="section-title">Evolução Diária dos Agentes IA</div>
+    <div class="chart-full" style="margin-bottom:24px">
+      <h3>Volume diário de atendimentos — todos os agentes</h3>
+      <div class="chart-sub">Fevereiro e março 2026 · linha vertical separa os meses</div>
+      <div class="chart-wrap" style="height:320px">
+        <canvas id="lineGeralVolume"></canvas>
+      </div>
+    </div>
+    <div class="chart-full">
+      <h3>Taxa de transferência diária (%) — todos os agentes</h3>
+      <div class="chart-sub">Dias com volume &lt; 5 atendimentos omitidos · passe o mouse para detalhes</div>
+      <div class="chart-wrap" style="height:300px">
+        <canvas id="lineGeralTransf"></canvas>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-top:24px">
+      <h3>Transferências diárias por departamento de destino — Geral</h3>
+      <div class="chart-sub">% diário de transferências recebidas por cada departamento vindo de IAs · linha vertical separa os meses</div>
+      <div class="chart-wrap" style="height:300px">
+        <canvas id="geralDestLine"></canvas>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /tab-geral -->
+
+<!-- ══ TAB: CS & SUPORTE ══ -->
+<div id="tab-cs" class="tab-content">
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">Visão Geral do Período</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card orange">
+        <div class="kpi-label">Total de Atendimentos CS</div>
+        <div class="kpi-value">42.012</div>
+        <div class="kpi-sub">Fev: 18.470 · Mar: 23.542</div>
+        <span class="kpi-delta pos">▲ +27,5% Fev→Mar</span>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Passaram pela Socorro</div>
+        <div class="kpi-value">25.887</div>
+        <div class="kpi-sub">61,6% dos atendimentos da área CS</div>
+        <span class="kpi-delta neu">Fev 61,5% · Mar 61,7%</span>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Taxa de Contenção (Socorro)</div>
+        <div class="kpi-value">36,6%</div>
+        <div class="kpi-sub">9.482 resolvidos sem escalar para humano</div>
+        <span class="kpi-delta neg">Fev 38,2% · Mar 35,4% ▼</span>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-label">Transferidos Socorro → Humano</div>
+        <div class="kpi-value">16.405</div>
+        <div class="kpi-sub">63,4% dos que passaram pela Socorro</div>
+        <span class="kpi-delta neu">Fev 7.010 · Mar 9.395</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Comparativo por Pilar — CS &amp; Suporte</div>
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <h3>Comparativo mensal por pilar — Fev vs Mar</h3>
+        <div class="chart-sub">Sem IA vs Via Socorro · cada pilar com dois meses lado a lado · passe o mouse para detalhes</div>
+        <div class="chart-wrap" style="height:300px">
+          <canvas id="barCSGrupos"></canvas>
+        </div>
+        <div class="legend" style="margin-top:12px">
+          <div class="legend-item"><div class="legend-dot" style="background:#4B5563"></div>Sem IA — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#14B8A6"></div>Via Socorro — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#9CA3AF"></div>Sem IA — Mar</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#5EEAD4"></div>Via Socorro — Mar</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Papel da Socorro como porta de entrada</h3>
+        <div class="chart-sub">% dos protocolos de cada pilar que passaram pela Socorro antes</div>
+        <div class="chart-wrap" style="height:300px">
+          <canvas id="barSocorroGateway"></canvas>
+        </div>
+        <div class="legend" style="margin-top:12px">
+          <div class="legend-item"><div class="legend-dot" style="background:#8B5CF6"></div>Via Socorro</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#E5E7EB"></div>Chegou direto</div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-top:28px">
+      <h3>% de transferências por departamento de destino — Fev vs Mar</h3>
+      <div class="chart-sub">Empilhado por agente de origem · barra sólida = Fev · translúcida = Mar</div>
+      <div class="chart-wrap" style="height:340px">
+        <canvas id="csDestBar"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Evolução Diária — CS &amp; Suporte</div>
+    <div class="chart-full" style="margin-bottom:24px">
+      <h3>Volume diário de atendimentos</h3>
+      <div class="chart-sub">Socorro · Clara · Luna · linha vertical separa os meses</div>
+      <div class="chart-wrap" style="height:280px">
+        <canvas id="lineCSDailyVolume"></canvas>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-bottom:24px">
+      <h3>Taxa de transferência diária (%)</h3>
+      <div class="chart-sub">Dias com volume &lt; 5 atendimentos omitidos</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="lineCSDailyTransf"></canvas>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-top:24px">
+      <h3>Transferências diárias por departamento de destino — CS &amp; Suporte</h3>
+      <div class="chart-sub">% diário de transferências recebidas por cada departamento vindo das IAs do CS · linha vertical separa os meses</div>
+      <div class="chart-wrap" style="height:300px">
+        <canvas id="csDestLine"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Perfil dos Agentes — CS &amp; Suporte</div>
+    <div class="agents-grid">
+
+      <!-- SOCORRO -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar" style="background:#8B5CF6">S</div>
+          <div>
+            <div class="agent-name">Socorro</div>
+            <div class="agent-role">Triagem Geral · IA - Atendimento Geral</div>
+          </div>
+        </div>
+        <div class="agent-stats">
+          <div class="stat-box">
+            <div class="s-label">Atendimentos</div>
+            <div class="s-val">25.887</div>
+            <div class="s-sub">+28% em Mar</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-label">Taxa Transferência</div>
+            <div class="s-val">63,4%</div>
+            <div class="s-sub">16.405 casos</div>
+          </div>
+        </div>
+        <div class="agent-bar-wrap">
+          <div class="bar-label"><span>Contenção</span><span style="color:#D97706;font-weight:700">36,6%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:36.6%;background:#8B5CF6"></div></div>
+        </div>
+        <div class="evol-row">
+          <div class="evol-item"><div class="e-month">Fev</div><div class="e-val">11.352</div><div class="e-rate">Transf: 61,8%</div></div>
+          <div class="evol-item"><div class="e-month">Mar</div><div class="e-val">14.535</div><div class="e-rate">Transf: 64,6%</div></div>
+        </div>
+        <span class="agent-tag warn" style="margin-top:10px">▲ +2,8pp transferência + volume crescente</span>
+        <div style="margin-top:6px">
+          <div style="font-size:11px;color:var(--text-muted)">CSAT: <strong>3,82/5</strong> ✓ · 15,6% resposta — melhor da equipe</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Design: agente de triagem, transferências são esperadas</div>
+        </div>
+        <div class="agent-destinos">
+          <h5>Distribui para (top transferências)</h5>
+          <div class="dest-row"><div class="dest-label">Suporte Técnico CV</div><div class="dest-track"><div class="dest-fill" style="width:100%;background:#8B5CF6"></div></div><div class="dest-num">7.699</div></div>
+          <div class="dest-row"><div class="dest-label">Sucesso do Cliente</div><div class="dest-track"><div class="dest-fill" style="width:53%;background:#8B5CF6"></div></div><div class="dest-num">4.061</div></div>
+          <div class="dest-row"><div class="dest-label">SAC</div><div class="dest-track"><div class="dest-fill" style="width:37%;background:#8B5CF6"></div></div><div class="dest-num">2.838</div></div>
+          <div class="dest-row"><div class="dest-label">Financeiro Blips</div><div class="dest-track"><div class="dest-fill" style="width:33%;background:#8B5CF6"></div></div><div class="dest-num">2.559</div></div>
+        </div>
+      </div>
+
+      <!-- CLARA + LUNA -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar" style="background:#6366F1">C</div>
+          <div>
+            <div class="agent-name">Clara + Luna</div>
+            <div class="agent-role">Onboarding + Ongoing</div>
+          </div>
+        </div>
+        <div style="background:var(--bg);border-radius:10px;padding:12px;margin-bottom:12px;">
+          <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text)">Clara — Onboarding (528 atend.)</div>
+          <div class="agent-bar-wrap">
+            <div class="bar-label"><span>Taxa de transferência</span><span style="color:#DC2626;font-weight:700">95,1%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:95.1%;background:#6366F1"></div></div>
+          </div>
+          <div class="evol-row">
+            <div class="evol-item"><div class="e-month">Fev</div><div class="e-val">247</div><div class="e-rate">Transf: 90,3%</div></div>
+            <div class="evol-item"><div class="e-month">Mar</div><div class="e-val">281</div><div class="e-rate">Transf: 99,3%</div></div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:6px">Transfere para: <strong>Documentação</strong> (631 registros) — fluxo de onboarding esperado</div>
+        </div>
+        <div style="background:var(--bg);border-radius:10px;padding:12px;">
+          <div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text)">Luna — Ongoing (158 atend.)</div>
+          <div class="agent-bar-wrap">
+            <div class="bar-label"><span>Taxa de transferência</span><span style="color:#DC2626;font-weight:700">72,8%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:72.8%;background:#6366F1"></div></div>
+          </div>
+          <div class="evol-row">
+            <div class="evol-item"><div class="e-month">Fev</div><div class="e-val">83</div><div class="e-rate">Transf: 56,6%</div></div>
+            <div class="evol-item"><div class="e-month">Mar</div><div class="e-val">75</div><div class="e-rate">Transf: 90,7%</div></div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:6px">Transfere principalmente para: <strong>Sucesso do Cliente Ongoing</strong></div>
+          <span class="agent-tag warn" style="margin-top:6px">▲ +34pp em Mar — requer atenção</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /tab-cs -->
+
+<!-- ══ TAB: FINANCEIRO & COBRANÇA ══ -->
+<div id="tab-financeiro" class="tab-content">
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">Visão Geral do Período</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card orange">
+        <div class="kpi-label">Total de Atendimentos</div>
+        <div class="kpi-value">44.424</div>
+        <div class="kpi-sub">Fev: 22.402 · Mar: 22.022</div>
+        <span class="kpi-delta neg">▼ −1,7% Fev→Mar</span>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Taxa de Contenção</div>
+        <div class="kpi-value">93,1%</div>
+        <div class="kpi-sub">41.377 resolvidos sem transferir</div>
+        <span class="kpi-delta neg">Fev 93,7% · Mar 92,5% ▼</span>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Transferidos para Humano</div>
+        <div class="kpi-value">3.047</div>
+        <div class="kpi-sub">6,9% dos atendimentos</div>
+        <span class="kpi-delta neu">Fev: 1.403 · Mar: 1.644</span>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-label">Transferência — Evolução</div>
+        <div class="kpi-value">▲ +1,2pp</div>
+        <div class="kpi-sub">Taxa subiu de 6,3% (Fev) para 7,5% (Mar)</div>
+        <span class="kpi-delta neg">Fev 6,3% · Mar 7,5% ▲</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Contenção vs Transferência — Esperanza</div>
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <h3>Contenção vs Transferência — Fev vs Mar</h3>
+        <div class="chart-sub">Esperanza · passe o mouse para detalhes</div>
+        <div class="chart-wrap" style="height:260px">
+          <canvas id="barEsperanzaFevMar"></canvas>
+        </div>
+        <div class="legend" style="margin-top:12px">
+          <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>Retido — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#34D399"></div>Retido — Mar</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Transf. — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FCA5A5"></div>Transf. — Mar</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Destinos das transferências</h3>
+        <div class="chart-sub">Top destinos · volume absoluto Fev+Mar</div>
+        <div class="chart-wrap" style="height:260px">
+          <canvas id="barEsperanzaDest"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-top:28px">
+      <h3>% de transferências por departamento de destino — Fev vs Mar</h3>
+      <div class="chart-sub">Empilhado por agente de origem · barra sólida = Fev · translúcida = Mar</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="finDestBar"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Evolução Diária — Financeiro &amp; Cobrança</div>
+    <div class="chart-full" style="margin-bottom:24px">
+      <h3>Volume diário de atendimentos — Esperanza</h3>
+      <div class="chart-sub">Fevereiro e março 2026 · linha vertical separa os meses</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="lineFinDailyVolume"></canvas>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-bottom:24px">
+      <h3>Taxa de transferência diária (%)</h3>
+      <div class="chart-sub">Dias com volume &lt; 10 atendimentos omitidos</div>
+      <div class="chart-wrap" style="height:240px">
+        <canvas id="lineFinDailyTransf"></canvas>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-top:24px">
+      <h3>Transferências diárias por departamento de destino — Financeiro &amp; Cobrança</h3>
+      <div class="chart-sub">% diário de transferências recebidas por cada departamento vindo da Esperanza · linha vertical separa os meses</div>
+      <div class="chart-wrap" style="height:300px">
+        <canvas id="finDestLine"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Perfil do Agente — Financeiro &amp; Cobrança</div>
+    <div class="agents-grid">
+
+      <!-- ESPERANZA -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar" style="background:#EF4444">E</div>
+          <div>
+            <div class="agent-name">Esperanza</div>
+            <div class="agent-role">Cobrança · IA - Financeiro</div>
+          </div>
+        </div>
+        <div class="agent-stats">
+          <div class="stat-box">
+            <div class="s-label">Atendimentos</div>
+            <div class="s-val">44.424</div>
+            <div class="s-sub">maior volume</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-label">Taxa Transferência</div>
+            <div class="s-val">6,9%</div>
+            <div class="s-sub">3.047 casos</div>
+          </div>
+        </div>
+        <div class="agent-bar-wrap">
+          <div class="bar-label"><span>Contenção</span><span style="color:#059669;font-weight:700">93,1%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:93.1%;background:#10B981"></div></div>
+        </div>
+        <div class="evol-row">
+          <div class="evol-item"><div class="e-month">Fev</div><div class="e-val">22.402</div><div class="e-rate">Transf: 6,3%</div></div>
+          <div class="evol-item"><div class="e-month">Mar</div><div class="e-val">22.022</div><div class="e-rate">Transf: 7,5%</div></div>
+        </div>
+        <span class="agent-tag warn" style="margin-top:10px">▲ +1,2pp transferência em Mar</span>
+        <div style="margin-top:6px">
+          <div style="font-size:11px;color:var(--text-muted)">CSAT: <strong>3,48/5</strong> · 1,2% resposta (421 de 36.397)</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">68,8% finalizam em <strong>Inatividade</strong> (cliente não responde)</div>
+        </div>
+        <div class="agent-destinos">
+          <h5>Transfere principalmente para</h5>
+          <div class="dest-row"><div class="dest-label">Cobrança</div><div class="dest-track"><div class="dest-fill" style="width:100%;background:#EF4444"></div></div><div class="dest-num">1.936</div></div>
+          <div class="dest-row"><div class="dest-label">Suporte Técnico CV</div><div class="dest-track"><div class="dest-fill" style="width:28%;background:#EF4444"></div></div><div class="dest-num">538</div></div>
+          <div class="dest-row"><div class="dest-label">FIDC</div><div class="dest-track"><div class="dest-fill" style="width:27%;background:#EF4444"></div></div><div class="dest-num">527</div></div>
+          <div class="dest-row"><div class="dest-label">Liquidação Financeira</div><div class="dest-track"><div class="dest-fill" style="width:16%;background:#EF4444"></div></div><div class="dest-num">305</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /tab-financeiro -->
+
+<!-- ══ TAB: MARKETING & COMERCIAL ══ -->
+<div id="tab-marketing" class="tab-content">
+<div class="container">
+
+  <div class="section">
+    <div class="section-title">Visão Geral do Período</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card orange">
+        <div class="kpi-label">Total de Atendimentos</div>
+        <div class="kpi-value">56.890</div>
+        <div class="kpi-sub">Fev: 25.626 · Mar: 31.264</div>
+        <span class="kpi-delta pos">▲ +22,0% Fev→Mar</span>
+      </div>
+      <div class="kpi-card green">
+        <div class="kpi-label">Taxa de Contenção (média pond.)</div>
+        <div class="kpi-value">84,2%</div>
+        <div class="kpi-sub">47.910 resolvidos sem transferir</div>
+        <span class="kpi-delta pos">Fev 80,9% · Mar 86,9% ▲</span>
+      </div>
+      <div class="kpi-card blue">
+        <div class="kpi-label">Transferidos para Humano</div>
+        <div class="kpi-value">8.980</div>
+        <div class="kpi-sub">15,8% dos atendimentos</div>
+        <span class="kpi-delta pos">Fev: 4.895 · Mar: 4.100 ▼ −16,2%</span>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-label">Kyara — Crescimento</div>
+        <div class="kpi-value">+165%</div>
+        <div class="kpi-sub">de 3.670 → 9.729 atendimentos em Mar</div>
+        <span class="kpi-delta pos">Fev 3.670 · Mar 9.729 🚀</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Volume por Agente — Marketing &amp; Comercial</div>
+    <div class="chart-grid-2">
+      <div class="chart-card">
+        <h3>Volume por agente — Fev vs Mar</h3>
+        <div class="chart-sub">Retido vs transferido · passe o mouse para detalhes</div>
+        <div class="chart-wrap" style="height:280px">
+          <canvas id="barMktAgentes"></canvas>
+        </div>
+        <div class="legend" style="margin-top:12px">
+          <div class="legend-item"><div class="legend-dot" style="background:#10B981"></div>Retido — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#34D399"></div>Retido — Mar</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#EF4444"></div>Transf. — Fev</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FCA5A5"></div>Transf. — Mar</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <h3>Taxa de contenção por agente</h3>
+        <div class="chart-sub">Total do período · % de atendimentos resolvidos sem transferir</div>
+        <div class="chart-wrap" style="height:280px">
+          <canvas id="barMktContencao"></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-top:28px">
+      <h3>% de transferências por departamento de destino — Fev vs Mar</h3>
+      <div class="chart-sub">Empilhado por agente de origem · barra sólida = Fev · translúcida = Mar</div>
+      <div class="chart-wrap" style="height:300px">
+        <canvas id="mktDestBar"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Evolução Diária — Marketing &amp; Comercial</div>
+    <div class="chart-full" style="margin-bottom:24px">
+      <h3>Volume diário de atendimentos</h3>
+      <div class="chart-sub">Dalila · Kyara · Mariah · linha vertical separa os meses</div>
+      <div class="chart-wrap" style="height:280px">
+        <canvas id="lineMktDailyVolume"></canvas>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-bottom:24px">
+      <h3>Taxa de transferência diária (%)</h3>
+      <div class="chart-sub">Dias com volume &lt; 5 atendimentos omitidos</div>
+      <div class="chart-wrap" style="height:260px">
+        <canvas id="lineMktDailyTransf"></canvas>
+      </div>
+    </div>
+    <div class="chart-full" style="margin-top:24px">
+      <h3>Transferências diárias por departamento de destino — Marketing &amp; Comercial</h3>
+      <div class="chart-sub">% diário de transferências recebidas por cada departamento vindo das IAs de Marketing · linha vertical separa os meses</div>
+      <div class="chart-wrap" style="height:300px">
+        <canvas id="mktDestLine"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Perfil dos Agentes — Marketing &amp; Comercial</div>
+    <div class="agents-grid">
+
+      <!-- DALILA -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar" style="background:#FFA300">D</div>
+          <div>
+            <div class="agent-name">Dalila</div>
+            <div class="agent-role">Comercial · SDR / Vendas / Outbound</div>
+          </div>
+        </div>
+        <div class="agent-stats">
+          <div class="stat-box">
+            <div class="s-label">Atendimentos</div>
+            <div class="s-val">36.508</div>
+            <div class="s-sub">3 departamentos</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-label">Taxa Transferência</div>
+            <div class="s-val">22,7%</div>
+            <div class="s-sub">8.283 casos</div>
+          </div>
+        </div>
+        <div class="agent-bar-wrap">
+          <div class="bar-label"><span>Contenção</span><span style="color:#059669;font-weight:700">77,3%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:77.3%;background:#FFA300"></div></div>
+        </div>
+        <div class="evol-row">
+          <div class="evol-item"><div class="e-month">Fev</div><div class="e-val">19.148</div><div class="e-rate">Transf: 24,2%</div></div>
+          <div class="evol-item"><div class="e-month">Mar</div><div class="e-val">17.360</div><div class="e-rate">Transf: 21,0%</div></div>
+        </div>
+        <span class="agent-tag ok" style="margin-top:10px">▼ −3,2pp transferência em Mar ✓</span>
+        <div style="margin-top:6px">
+          <div style="font-size:11px;color:var(--text-muted)">CSAT: <strong>3,43/5</strong> · 1,3% resposta</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Outbound: <strong>3.027 (Fev) → 350 (Mar)</strong> — menos campanhas</div>
+        </div>
+        <div class="agent-destinos">
+          <h5>Transfere principalmente para</h5>
+          <div class="dest-row"><div class="dest-label">SDR Humano</div><div class="dest-track"><div class="dest-fill" style="width:100%;background:#FFA300"></div></div><div class="dest-num">4.605</div></div>
+          <div class="dest-row"><div class="dest-label">Comercial - Sorvete</div><div class="dest-track"><div class="dest-fill" style="width:26%;background:#FFA300"></div></div><div class="dest-num">1.216</div></div>
+          <div class="dest-row"><div class="dest-label">Comercial - Artesanato</div><div class="dest-track"><div class="dest-fill" style="width:11%;background:#FFA300"></div></div><div class="dest-num">528</div></div>
+          <div class="dest-row"><div class="dest-label">Comercial - Fitness</div><div class="dest-track"><div class="dest-fill" style="width:11%;background:#FFA300"></div></div><div class="dest-num">522</div></div>
+        </div>
+      </div>
+
+      <!-- KYARA -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar" style="background:#14B8A6">K</div>
+          <div>
+            <div class="agent-name">Kyara</div>
+            <div class="agent-role">Reengajamento · IA - Perdidos</div>
+          </div>
+        </div>
+        <div class="agent-stats">
+          <div class="stat-box">
+            <div class="s-label">Atendimentos</div>
+            <div class="s-val">13.399</div>
+            <div class="s-sub" style="color:#059669;font-weight:600">+165% em Mar 🚀</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-label">Taxa Transferência</div>
+            <div class="s-val">3,8%</div>
+            <div class="s-sub">514 casos</div>
+          </div>
+        </div>
+        <div class="agent-bar-wrap">
+          <div class="bar-label"><span>Contenção</span><span style="color:#059669;font-weight:700">96,2%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:96.2%;background:#14B8A6"></div></div>
+        </div>
+        <div class="evol-row">
+          <div class="evol-item"><div class="e-month">Fev</div><div class="e-val">3.670</div><div class="e-rate">Transf: 4,8%</div></div>
+          <div class="evol-item"><div class="e-month">Mar</div><div class="e-val">9.729</div><div class="e-rate">Transf: 3,5%</div></div>
+        </div>
+        <span class="agent-tag ok" style="margin-top:10px">Maior crescimento do período ▲ +165%</span>
+        <div style="margin-top:6px">
+          <div style="font-size:11px;color:var(--text-muted)">Contata leads que <strong>não seguiram com o comercial</strong> para entender o motivo</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">63,3% finalizados pela Kyara · sem CSAT configurado</div>
+        </div>
+        <div class="agent-destinos">
+          <h5>Quando transfere, vai para</h5>
+          <div class="dest-row"><div class="dest-label">Comercial - CV</div><div class="dest-track"><div class="dest-fill" style="width:100%;background:#14B8A6"></div></div><div class="dest-num">136</div></div>
+          <div class="dest-row"><div class="dest-label">Comercial - Sorvete</div><div class="dest-track"><div class="dest-fill" style="width:69%;background:#14B8A6"></div></div><div class="dest-num">94</div></div>
+          <div class="dest-row"><div class="dest-label">Documentação</div><div class="dest-track"><div class="dest-fill" style="width:43%;background:#14B8A6"></div></div><div class="dest-num">59</div></div>
+          <div class="dest-row"><div class="dest-label">Comercial - Confecção</div><div class="dest-track"><div class="dest-fill" style="width:33%;background:#14B8A6"></div></div><div class="dest-num">45</div></div>
+        </div>
+      </div>
+
+      <!-- MARIAH -->
+      <div class="agent-card">
+        <div class="agent-header">
+          <div class="agent-avatar" style="background:#EC4899">M</div>
+          <div>
+            <div class="agent-name">Mariah</div>
+            <div class="agent-role">Marketing / Instagram · IA - Marketing</div>
+          </div>
+        </div>
+        <div class="agent-stats">
+          <div class="stat-box">
+            <div class="s-label">Atendimentos</div>
+            <div class="s-val">6.983</div>
+            <div class="s-sub" style="color:#059669;font-weight:600">+48,7% em Mar</div>
+          </div>
+          <div class="stat-box">
+            <div class="s-label">Taxa Transferência</div>
+            <div class="s-val">2,6%</div>
+            <div class="s-sub">183 casos</div>
+          </div>
+        </div>
+        <div class="agent-bar-wrap">
+          <div class="bar-label"><span>Contenção</span><span style="color:#059669;font-weight:700">97,4%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:97.4%;background:#EC4899"></div></div>
+        </div>
+        <div class="evol-row">
+          <div class="evol-item"><div class="e-month">Fev</div><div class="e-val">2.808</div><div class="e-rate">Transf: 2,7%</div></div>
+          <div class="evol-item"><div class="e-month">Mar</div><div class="e-val">4.175</div><div class="e-rate">Transf: 2,6%</div></div>
+        </div>
+        <span class="agent-tag ok" style="margin-top:10px">Alta contenção + volume crescendo</span>
+        <div style="margin-top:6px">
+          <div style="font-size:11px;color:var(--text-muted)">Atua no Instagram: <strong>cadastra leads</strong> interessados e <strong>encaminha reclamações</strong> ao SAC</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px">CSAT: <strong>3,63/5</strong> · 90,2% encerram em inatividade (leads sem resposta)</div>
+        </div>
+        <div class="agent-destinos">
+          <h5>Quando transfere, vai para</h5>
+          <div class="dest-row"><div class="dest-label">Sucesso do Cliente SAC</div><div class="dest-track"><div class="dest-fill" style="width:100%;background:#EC4899"></div></div><div class="dest-num">278</div></div>
+          <div class="dest-row"><div class="dest-label">Comercial - Sorvete</div><div class="dest-track"><div class="dest-fill" style="width:3%;background:#EC4899"></div></div><div class="dest-num">9</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /container -->
+</div><!-- /tab-marketing -->
+
+<!-- FOOTER -->
+<div class="footer">
+  Relatório gerado com base nos dados exportados do Hyperflow · Blips · Fevereiro–Março 2026<br>
+  177.957 protocolos analisados · Metodologia: protocolo considerado "Via Agente IA" se passou por ao menos um departamento IA-* no roteamento
+</div>
+
+<script>
+Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+Chart.defaults.plugins.legend.display = false;
+Chart.defaults.plugins.tooltip.padding = 10;
+Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(26,26,46,0.92)';
+
+const agentes = ['Esperanza','Dalila','Socorro','Kyara','Mariah','Clara','Luna'];
+const cores   = ['#EF4444','#FFA300','#8B5CF6','#14B8A6','#EC4899','#6366F1','#F59E0B'];
+
+// ── TOOLTIP HELPER: tooltip empilhado com total ──
+// Mostra label+valor de cada dataset + linha de total
+function stackedTooltipPlugin(fmt) {
+  // fmt: 'number' | 'percent'
+  return {
+    mode: 'index',
+    intersect: false,
+    callbacks: {
+      label(ctx) {
+        const v = ctx.raw ?? 0;
+        const disp = fmt === 'percent'
+          ? `${v.toLocaleString('pt-BR')}%`
+          : v.toLocaleString('pt-BR');
+        return `  ${ctx.dataset.label}: ${disp}`;
+      },
+      footer(items) {
+        if (!items.length) return '';
+        const total = items.reduce((s, i) => s + (i.raw ?? 0), 0);
+        const disp  = fmt === 'percent'
+          ? `${total.toLocaleString('pt-BR', {maximumFractionDigits:1})}%`
+          : total.toLocaleString('pt-BR');
+        return `  Total: ${disp}`;
+      }
+    },
+    footerFont: { weight: 'bold' },
+    footerColor: '#FFA300'
+  };
+}
+
+// ── DONUT TOTAL ──
+new Chart(document.getElementById('donutTotal'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Via Agente IA','Apenas Humano','Tel. Corporativo','Aviso Automático'],
+    datasets: [{ data: [126096, 22619, 21188, 8054], backgroundColor: ['#FFA300','#3B82F6','#9CA3AF','#D1D5DB'], borderWidth: 2, borderColor: '#fff' }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false, cutout: '65%',
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: (c) => ` ${c.label}: ${c.raw.toLocaleString('pt-BR')} (${(c.raw/177957*100).toFixed(1)}%)` } }
+    }
+  }
+});
+
+// ── BAR MENSAL (empilhado) ──
+new Chart(document.getElementById('barMensal'), {
+  type: 'bar',
+  data: {
+    labels: ['Fevereiro','Março'],
+    datasets: [
+      { label: 'Via Agente IA',    data: [58918, 67178], backgroundColor: '#FFA300' },
+      { label: 'Apenas Humano',    data: [10533, 12086], backgroundColor: '#3B82F6' },
+      { label: 'Tel. Corporativo', data: [7000,  14188], backgroundColor: '#9CA3AF' },
+      { label: 'Aviso Automático', data: [4872,   3182], backgroundColor: '#D1D5DB' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: true, position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12, padding: 10 } },
+      tooltip: stackedTooltipPlugin('number')
+    },
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, ticks: { callback: v => v.toLocaleString('pt-BR') }, grid: { color: '#F3F4F6' } }
+    }
+  }
+});
+
+// ── STACKED AGENTS: retido vs transferido ──
+// retido = total - transferido
+const agRetidos    = [41377, 28225,  9482, 12885, 6800,  26,  43];
+const agTransf     = [ 3047,  8283, 16405,   514,  183, 502, 115];
+const agTotais     = agRetidos.map((r,i) => r + agTransf[i]);
+const agTaxaRetid  = agRetidos.map((r,i) => (r / agTotais[i] * 100).toFixed(1));
+const agTaxaTransf = agTransf.map((t,i) => (t  / agTotais[i] * 100).toFixed(1));
+
+new Chart(document.getElementById('barStackedAgents'), {
+  type: 'bar',
+  data: {
+    labels: agentes,
+    datasets: [
+      { label: 'Retido pela IA',         data: agRetidos, backgroundColor: '#10B981' },
+      { label: 'Transferido para humano', data: agTransf,  backgroundColor: '#EF4444' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: true, position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12, padding: 10 } },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+          title(items) {
+            const idx = items[0].dataIndex;
+            return `${agentes[idx]}  —  Total: ${agTotais[idx].toLocaleString('pt-BR')}`;
+          },
+          label(ctx) {
+            const idx      = ctx.dataIndex;
+            const v        = ctx.raw;
+            const isRetido = ctx.datasetIndex === 0;
+            const taxa     = isRetido ? agTaxaRetid[idx] : agTaxaTransf[idx];
+            const icon     = isRetido ? '✅' : '🔁';
+            return `  ${icon} ${ctx.dataset.label}: ${v.toLocaleString('pt-BR')} (${taxa}%)`;
+          },
+          footer() { return ''; }
+        },
+        footerFont: { weight: 'bold' },
+        footerColor: '#FFA300'
+      }
+    },
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, ticks: { callback: v => v.toLocaleString('pt-BR') }, grid: { color: '#F3F4F6' } }
+    }
+  }
+});
+
+// ── STACKED GROUPED: Fev vs Mar por agente ──
+const fevRetido = [20999, 14504,  4342, 3494, 2733,  24, 36];
+const fevTransf = [ 1403,  4644,  7010,  176,   75, 223, 47];
+const marRetido = [20378, 13706,  5140, 9391, 4067,   2,  7];
+const marTransf = [ 1644,  3654,  9395,  338,  108, 279, 68];
+const fevTotais = fevRetido.map((r,i) => r + fevTransf[i]);
+const marTotais = marRetido.map((r,i) => r + marTransf[i]);
+
+new Chart(document.getElementById('barStackedFevMar'), {
+  type: 'bar',
+  data: {
+    labels: agentes,
+    datasets: [
+      { label: 'Retido — Fev',        data: fevRetido, backgroundColor: '#10B981', stack: 'fev' },
+      { label: 'Transferido — Fev',   data: fevTransf, backgroundColor: '#EF4444', stack: 'fev' },
+      { label: 'Retido — Mar',        data: marRetido, backgroundColor: '#34D399', stack: 'mar' },
+      { label: 'Transferido — Mar',   data: marTransf, backgroundColor: '#FCA5A5', stack: 'mar' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+          title(items) {
+            const idx = items[0].dataIndex;
+            return `${agentes[idx]}`;
+          },
+          label(ctx) {
+            const idx = ctx.dataIndex;
+            const v   = ctx.raw;
+            const isFev    = ctx.dataset.stack === 'fev';
+            const isRetido = ctx.datasetIndex === 0 || ctx.datasetIndex === 2;
+            const icon = isRetido ? '✅' : '🔁';
+            const mes  = isFev ? 'Fev' : 'Mar';
+            const tot  = isFev ? fevTotais[idx] : marTotais[idx];
+            const pct  = tot > 0 ? (v / tot * 100).toFixed(1) : '0';
+            return `  ${icon} ${mes} · ${ctx.dataset.label.split('—')[0].trim()}: ${v.toLocaleString('pt-BR')} (${pct}%)`;
+          },
+          footer(items) {
+            const idx = items[0].dataIndex;
+            return [
+              `  Total Fev: ${fevTotais[idx].toLocaleString('pt-BR')}`,
+              `  Total Mar: ${marTotais[idx].toLocaleString('pt-BR')}`
+            ];
+          }
+        },
+        footerFont: { weight: 'bold' },
+        footerColor: '#FFA300'
+      }
+    },
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, ticks: { callback: v => v.toLocaleString('pt-BR') }, grid: { color: '#F3F4F6' } }
+    }
+  }
+});
+
+// ── DESTINOS DAS TRANSFERÊNCIAS (100% stacked horizontal) ──
+// Routing steps agrupados por categoria de destino
+// Nota: routing steps > unique protocols pois um protocolo pode passar por vários depts
+const tdAgentes  = ['Esperanza','Dalila','Socorro','Kyara','Mariah','Clara','Luna'];
+const tdUniq     = [3047, 8283, 16405, 514, 183, 502, 115]; // protocolos únicos transferidos
+const tdCobr     = [3476,  258,  4510,  24,   5,   5,   9]; // Cobrança / Financeiro
+const tdCom      = [ 316, 8163,  7176, 567,  20,  15,  13]; // Comercial / SDR
+const tdCS       = [1738, 1158, 23660, 116, 294, 700, 186]; // CS & Suporte
+const tdOutros   = [ 154,   22,   129,   1,   2,   0,   0]; // Outros
+const tdTotal    = tdCobr.map((v,i) => v + tdCom[i] + tdCS[i] + tdOutros[i]);
+
+const tdPct = (arr) => arr.map((v,i) => +(v/tdTotal[i]*100).toFixed(1));
+
+new Chart(document.getElementById('barTransfDest'), {
+  type: 'bar',
+  data: {
+    labels: tdAgentes,
+    datasets: [
+      { label: 'Cobrança / Financeiro', data: tdPct(tdCobr),   backgroundColor: '#EF4444', stack: 's' },
+      { label: 'Comercial / SDR',       data: tdPct(tdCom),    backgroundColor: '#FFA300', stack: 's' },
+      { label: 'CS & Suporte',          data: tdPct(tdCS),     backgroundColor: '#8B5CF6', stack: 's' },
+      { label: 'Outros',                data: tdPct(tdOutros), backgroundColor: '#D1D5DB', stack: 's' }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        mode: 'index', intersect: false,
+        callbacks: {
+          title(items) {
+            const i = items[0].dataIndex;
+            return `${tdAgentes[i]}  —  ${tdUniq[i].toLocaleString('pt-BR')} protocolos transferidos`;
+          },
+          label(ctx) {
+            const i    = ctx.dataIndex;
+            const pct  = ctx.raw;
+            const abs  = [tdCobr, tdCom, tdCS, tdOutros][ctx.datasetIndex][i];
+            return `  ${ctx.dataset.label}: ${pct}%  (${abs.toLocaleString('pt-BR')} roteamentos)`;
+          },
+          footer() { return ''; }
+        }
+      }
+    },
+    scales: {
+      x: { stacked: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#F3F4F6' } },
+      y: { stacked: true, grid: { display: false } }
+    }
+  }
+});
+
+// ══════════════════════════════════════════
+// SEÇÃO CS & SUPORTE — GRÁFICOS
+// ══════════════════════════════════════════
+
+const csGrupos = ['Socorro\n(Triagem IA)', 'Suporte\nTécnico', 'Onboarding /\nInstalação', 'Sucesso do\nCliente', 'Documentação'];
+const csGruposShort = ['Socorro', 'Suporte Técnico', 'Onboarding/Instalação', 'Sucesso do Cliente', 'Documentação'];
+
+// ── 1. VOLUME POR GRUPO: Comparativo Fev vs Mar por pilar (grouped+stacked) ──
+// Socorro: apenas retido (ela é o próprio agente IA, sem "Sem IA")
+// Demais pilares: Sem IA + Via Socorro (IA)
+const csFevSemIA  = [    0, 1285, 2355, 1879, 2664];  // [Socorro, Suporte, Onboarding, Sucesso, Doc]
+const csFevViaIA  = [ 4320, 3011, 1272, 2351,  810];  // Socorro=retido; outros=via Socorro
+const csMarSemIA  = [    0, 2182, 2729, 2893, 2638];
+const csMarViaIA  = [ 5117, 3977, 1857, 3002, 1127];  // Socorro=retido; outros=via Socorro
+const csFevTotais = csFevSemIA.map((v,i) => v + csFevViaIA[i]);
+const csMarTotais = csMarSemIA.map((v,i) => v + csMarViaIA[i]);
+
+new Chart(document.getElementById('barCSGrupos'), {
+  type: 'bar',
+  data: {
+    labels: csGrupos,
+    datasets: [
+      { label: 'Sem IA — Fev',       data: csFevSemIA,  backgroundColor: '#4B5563', stack: 'fev' },
+      { label: 'Via Socorro — Fev',  data: csFevViaIA,  backgroundColor: '#14B8A6', stack: 'fev' },
+      { label: 'Sem IA — Mar',       data: csMarSemIA,  backgroundColor: '#9CA3AF', stack: 'mar' },
+      { label: 'Via Socorro — Mar',  data: csMarViaIA,  backgroundColor: '#5EEAD4', stack: 'mar' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        mode: 'index', intersect: false,
+        callbacks: {
+          title(items) { return csGruposShort[items[0].dataIndex]; },
+          label(ctx) {
+            const idx = ctx.dataIndex;
+            const v   = ctx.raw ?? 0;
+            if (v === 0) return null;
+            const isFev = ctx.dataset.stack === 'fev';
+            const tot   = isFev ? csFevTotais[idx] : csMarTotais[idx];
+            const pct   = tot > 0 ? (v / tot * 100).toFixed(1) : '0';
+            const mes   = isFev ? 'Fev' : 'Mar';
+            const cat   = ctx.dataset.label.split('—')[0].trim();
+            return `  ${mes} · ${cat}: ${v.toLocaleString('pt-BR')} (${pct}%)`;
+          },
+          footer(items) {
+            const idx = items[0].dataIndex;
+            const varPct = csFevTotais[idx] > 0
+              ? ((csMarTotais[idx] - csFevTotais[idx]) / csFevTotais[idx] * 100).toFixed(1)
+              : '0';
+            const sinal = varPct >= 0 ? '+' : '';
+            return [
+              `  Total Fev: ${csFevTotais[idx].toLocaleString('pt-BR')}`,
+              `  Total Mar: ${csMarTotais[idx].toLocaleString('pt-BR')}  (${sinal}${varPct}%)`
+            ];
+          }
+        },
+        footerFont: { weight: 'bold' }, footerColor: '#FFA300'
+      }
+    },
+    scales: {
+      x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10 } } },
+      y: { stacked: true, ticks: { callback: v => v.toLocaleString('pt-BR') }, grid: { color: '#F3F4F6' } }
+    }
+  }
+});
+
+// ── 2. SOCORRO COMO GATEWAY (horizontal stacked %) ──
+const socorroVia    = [null, 6988, 3149, 5353, 1937];   // Socorro não tem "via Socorro" para si mesma
+const socorroDireto = [null, 3467, 5530, 4823, 5302];
+const socorroLabels = ['Suporte Técnico', 'Onboarding/Instalação', 'Sucesso do Cliente', 'Documentação'];
+const sVia    = [6988, 3149, 5353, 1937];
+const sDireto = [3467, 5530, 4823, 5302];
+const sTotal  = sVia.map((v,i) => v + sDireto[i]);
+const sPctVia    = sVia.map((v,i) => +(v / sTotal[i] * 100).toFixed(1));
+const sPctDireto = sDireto.map((v,i) => +(v / sTotal[i] * 100).toFixed(1));
+
+new Chart(document.getElementById('barSocorroGateway'), {
+  type: 'bar',
+  data: {
+    labels: socorroLabels,
+    datasets: [
+      { label: 'Via Socorro',  data: sPctVia,    backgroundColor: '#8B5CF6' },
+      { label: 'Chegou direto',data: sPctDireto, backgroundColor: '#E5E7EB' }
+    ]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        mode: 'index', intersect: false,
+        callbacks: {
+          title: (i) => socorroLabels[i[0].dataIndex],
+          label: (c) => {
+            const idx = c.dataIndex;
+            const isVia = c.datasetIndex === 0;
+            const abs   = isVia ? sVia[idx] : sDireto[idx];
+            return `  ${c.dataset.label}: ${c.raw}% (${abs.toLocaleString('pt-BR')})`;
+          },
+          footer: (i) => `  Total: ${sTotal[i[0].dataIndex].toLocaleString('pt-BR')}`
+        },
+        footerFont: { weight: 'bold' }, footerColor: '#FFA300'
+      }
+    },
+    scales: {
+      x: { stacked: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#F3F4F6' } },
+      y: { stacked: true, grid: { display: false } }
+    }
+  }
+});
+
+// ══ EVOLUÇÃO DIÁRIA — dados base ══
+const rawDates = ["2026-02-01","2026-02-02","2026-02-03","2026-02-04","2026-02-05","2026-02-06","2026-02-07","2026-02-08","2026-02-09","2026-02-10","2026-02-11","2026-02-12","2026-02-13","2026-02-14","2026-02-15","2026-02-16","2026-02-17","2026-02-18","2026-02-19","2026-02-20","2026-02-21","2026-02-22","2026-02-23","2026-02-24","2026-02-25","2026-02-26","2026-02-27","2026-02-28","2026-03-01","2026-03-02","2026-03-03","2026-03-04","2026-03-05","2026-03-06","2026-03-07","2026-03-08","2026-03-09","2026-03-10","2026-03-11","2026-03-12","2026-03-13","2026-03-14","2026-03-15","2026-03-16","2026-03-17","2026-03-18","2026-03-19","2026-03-20","2026-03-21","2026-03-22","2026-03-23","2026-03-24","2026-03-25","2026-03-26","2026-03-27","2026-03-28","2026-03-29","2026-03-30","2026-03-31"];
+const dailyLabels = rawDates.map(d => d.slice(8,10)+'/'+d.slice(5,7));
+// Índice do primeiro dia de março (para linha divisória)
+const marcoIdx = rawDates.findIndex(d => d.startsWith('2026-03'));
+
+// Volume diário por agente
+const volEsperanza = [1,12,15,106,664,125,1,4,4836,807,67,2702,1213,19,21,2753,394,2311,656,819,23,13,2197,689,711,1038,199,6,0,1014,135,37,986,275,8,2,936,1083,122,781,101,5,1,2119,452,1286,139,1871,8,12,2178,246,605,2862,1219,7,1,1608,1923];
+const volDalila    = [50,142,311,803,584,91,89,110,941,836,583,660,1066,105,153,448,435,1204,1086,2133,1787,28,759,1702,1112,1244,600,86,27,124,371,544,325,102,48,72,360,529,740,187,606,49,36,1249,1168,1653,601,266,79,101,636,1069,1279,1403,1326,858,176,1254,122];
+const volSocorro   = [39,645,642,502,400,459,133,54,582,648,491,492,380,152,65,282,188,535,638,550,206,96,710,607,554,558,526,218,40,613,591,569,533,530,133,63,677,684,575,610,608,190,83,590,522,664,601,683,150,72,718,698,622,679,543,169,84,642,599];
+const volKyara     = [1,321,212,142,112,106,0,2,185,274,166,133,53,1,1,1,128,233,119,281,4,1,207,339,196,161,291,0,0,240,307,284,208,126,0,0,161,133,103,376,176,0,0,573,816,944,702,535,5,1,665,472,425,463,538,8,2,813,653];
+const volMariah    = [27,106,114,132,111,101,74,90,93,119,124,115,116,88,94,119,123,145,137,147,106,88,109,103,79,78,48,22,12,68,119,114,108,98,64,83,96,119,114,126,112,73,101,114,114,114,129,140,110,124,202,267,278,306,275,195,194,125,81];
+const volClara     = [1,8,14,8,16,14,2,0,10,17,11,24,20,2,2,1,7,13,16,17,1,1,19,17,6,0,0,0,0,0,0,9,9,8,0,0,17,11,17,9,14,4,0,13,10,21,10,10,1,0,18,12,9,15,20,5,1,15,23];
+const volLuna      = [1,1,1,6,3,9,9,5,2,2,5,4,2,6,4,0,0,0,3,3,4,1,2,0,3,2,3,2,1,3,0,1,1,3,4,2,2,0,6,2,6,6,3,1,1,3,3,1,4,3,1,0,2,3,4,3,1,4,1];
+
+// % transferência diária (null = sem dados suficientes)
+const MIN_VOL_GERAL = 5, MIN_VOL_FIN = 10;
+function filterPct(pcts, vols, minVol) {
+  return pcts.map((v,i) => (vols[i] >= minVol ? v : null));
+}
+const pctEsperanzaRaw = [0.0,33.3,80.0,12.3,7.7,5.6,100.0,50.0,4.1,6.8,19.4,6.7,7.3,31.6,52.4,5.5,4.3,7.9,9.6,4.4,21.7,0.0,5.8,4.8,5.8,7.2,6.5,33.3,null,5.6,7.4,16.2,5.2,4.4,62.5,50.0,4.2,6.4,9.8,8.5,8.9,0.0,100.0,6.6,12.4,7.2,16.5,6.3,12.5,16.7,7.1,13.4,6.4,7.3,6.3,28.6,0.0,4.9,7.4];
+const pctDalilaRaw   = [22.0,31.7,25.1,11.2,5.8,23.1,28.1,30.9,3.2,6.3,2.7,12.7,7.6,15.2,3.9,6.9,14.7,11.3,5.9,3.8,2.2,14.3,14.5,6.3,5.8,7.9,12.7,65.1,18.5,52.4,25.9,8.8,9.5,28.4,27.1,19.4,23.1,17.8,32.4,24.6,13.7,24.5,22.2,9.7,11.1,8.3,13.0,21.1,19.0,18.8,14.6,7.0,9.9,9.6,7.0,5.0,11.9,10.5,30.3];
+const pctSocorroRaw  = [56.4,61.6,55.6,62.4,70.0,64.5,48.9,55.6,60.3,56.0,64.6,51.6,56.6,44.1,38.5,57.4,48.4,44.1,60.8,53.5,48.5,45.8,63.1,58.3,57.4,57.3,60.1,43.1,37.5,64.8,59.2,60.3,56.1,56.2,53.4,39.7,61.3,58.2,55.1,58.0,54.3,42.6,42.2,53.9,54.0,56.0,50.9,55.2,47.3,41.7,57.8,66.2,61.6,68.3,71.1,60.4,47.6,71.5,72.1];
+const pctKyaraRaw    = [0.0,4.7,9.4,0.7,0.0,0.0,null,0.0,0.0,6.9,6.0,6.0,11.3,0.0,0.0,0.0,4.7,5.2,5.0,4.6,0.0,0.0,3.4,3.2,5.6,1.9,2.1,null,null,3.3,4.6,1.8,3.4,4.8,null,null,1.9,5.3,0.0,1.6,2.8,null,null,2.3,1.7,2.1,3.8,4.1,0.0,0.0,6.2,6.6,4.0,3.7,3.0,25.0,0.0,3.9,2.3];
+const pctMariahRaw   = [3.7,6.6,1.8,1.5,0.0,7.9,0.0,1.1,2.2,0.8,0.0,3.5,4.3,1.1,0.0,1.7,1.6,4.8,5.1,1.4,1.9,0.0,5.5,2.9,2.5,2.6,8.3,0.0,0.0,4.4,4.2,5.3,2.8,1.0,1.6,0.0,6.2,1.7,1.8,4.0,3.6,0.0,0.0,3.5,4.4,4.4,3.1,3.6,1.8,0.0,1.5,3.7,1.1,3.3,2.2,0.0,0.0,4.8,7.4];
+
+const pctEsperanza = filterPct(pctEsperanzaRaw, volEsperanza, MIN_VOL_FIN);
+const pctDalila    = filterPct(pctDalilaRaw,    volDalila,    MIN_VOL_GERAL);
+const pctSocorro   = filterPct(pctSocorroRaw,   volSocorro,   MIN_VOL_GERAL);
+const pctKyara     = filterPct(pctKyaraRaw,     volKyara,     MIN_VOL_GERAL);
+const pctMariah    = filterPct(pctMariahRaw,     volMariah,    MIN_VOL_GERAL);
+
+// Plugin de linha divisória Fev/Mar
+const monthDividerPlugin = {
+  id: 'monthDivider',
+  afterDraw(chart) {
+    const { ctx, chartArea: { top, bottom }, scales: { x } } = chart;
+    if (!x) return;
+    const xPos = x.getPixelForValue(marcoIdx - 0.5);
+    ctx.save();
+    ctx.beginPath();
+    ctx.setLineDash([6, 4]);
+    ctx.strokeStyle = '#94A3B8';
+    ctx.lineWidth = 1.5;
+    ctx.moveTo(xPos, top);
+    ctx.lineTo(xPos, bottom);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#94A3B8';
+    ctx.font = '11px Segoe UI, sans-serif';
+    ctx.fillText('Mar', xPos + 4, top + 14);
+    ctx.restore();
+  }
+};
+
+// Helper: cria line chart
+function makeLineChart(canvasId, datasets, isPercent, plugins=[]) {
+  return new Chart(document.getElementById(canvasId), {
+    type: 'line',
+    plugins: plugins,
+    data: { labels: dailyLabels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      spanGaps: true,
+      plugins: {
+        legend: { display: true, position: 'bottom', labels: { font:{size:11}, boxWidth:12, padding:10, usePointStyle:true } },
+        tooltip: {
+          mode: 'index', intersect: false,
+          callbacks: {
+            title: (i) => dailyLabels[i[0].dataIndex],
+            label(ctx) {
+              if (ctx.raw === null || ctx.raw === undefined) return null;
+              const val = isPercent ? `${ctx.raw}%` : ctx.raw.toLocaleString('pt-BR');
+              return `  ${ctx.dataset.label}: ${val}`;
+            },
+            footer(items) {
+              if (isPercent) return '';
+              const tot = items.reduce((s,i) => s + (i.raw ?? 0), 0);
+              return `  Total: ${tot.toLocaleString('pt-BR')}`;
+            }
+          },
+          footerFont: { weight: 'bold' }, footerColor: '#FFA300'
+        }
+      },
+      scales: {
+        x: { ticks: { maxTicksLimit: 20, font:{size:10} }, grid: { color: '#F3F4F6' } },
+        y: {
+          ticks: { callback: v => isPercent ? v+'%' : v.toLocaleString('pt-BR') },
+          grid: { color: '#F3F4F6' },
+          ...(isPercent ? { min: 0, max: 100 } : {})
+        }
+      }
+    }
+  });
+}
+
+function ds(label, data, color, dash=false) {
+  return {
+    label, data,
+    borderColor: color, backgroundColor: color+'15',
+    borderWidth: 1.8, borderDash: dash ? [5,3] : [],
+    pointRadius: 1.5, pointHoverRadius: 5,
+    tension: 0.3, fill: false, spanGaps: true
+  };
+}
+
+// ── GERAL: Volume diário (todos os agentes) ──
+makeLineChart('lineGeralVolume', [
+  ds('Esperanza', volEsperanza, '#EF4444'),
+  ds('Dalila',    volDalila,    '#FFA300'),
+  ds('Socorro',   volSocorro,   '#8B5CF6'),
+  ds('Kyara',     volKyara,     '#14B8A6'),
+  ds('Mariah',    volMariah,    '#EC4899'),
+  ds('Clara',     volClara,     '#6366F1', true),
+  ds('Luna',      volLuna,      '#F59E0B', true)
+], false, [monthDividerPlugin]);
+
+// ── GERAL: % Transferência diária ──
+makeLineChart('lineGeralTransf', [
+  ds('Esperanza', pctEsperanza, '#EF4444'),
+  ds('Dalila',    pctDalila,    '#FFA300'),
+  ds('Socorro',   pctSocorro,   '#8B5CF6'),
+  ds('Kyara',     pctKyara,     '#14B8A6'),
+  ds('Mariah',    pctMariah,    '#EC4899')
+], true, [monthDividerPlugin]);
+
+// ── CS: Volume diário ──
+makeLineChart('lineCSDailyVolume', [
+  ds('Socorro', volSocorro, '#8B5CF6'),
+  ds('Clara',   volClara,   '#6366F1', true),
+  ds('Luna',    volLuna,    '#F59E0B', true)
+], false, [monthDividerPlugin]);
+
+// ── CS: % Transferência diária ──
+makeLineChart('lineCSDailyTransf', [
+  ds('Socorro', pctSocorro, '#8B5CF6'),
+], true, [monthDividerPlugin]);
+
+// ── FINANCEIRO: Volume diário ──
+makeLineChart('lineFinDailyVolume', [
+  ds('Esperanza', volEsperanza, '#EF4444')
+], false, [monthDividerPlugin]);
+
+// ── FINANCEIRO: % Transferência diária ──
+makeLineChart('lineFinDailyTransf', [
+  ds('Esperanza', pctEsperanza, '#EF4444')
+], true, [monthDividerPlugin]);
+
+// ── MARKETING: Volume diário ──
+makeLineChart('lineMktDailyVolume', [
+  ds('Dalila',  volDalila,  '#FFA300'),
+  ds('Kyara',   volKyara,   '#14B8A6'),
+  ds('Mariah',  volMariah,  '#EC4899')
+], false, [monthDividerPlugin]);
+
+// ── MARKETING: % Transferência diária ──
+makeLineChart('lineMktDailyTransf', [
+  ds('Dalila',  pctDalila,  '#FFA300'),
+  ds('Kyara',   pctKyara,   '#14B8A6'),
+  ds('Mariah',  pctMariah,  '#EC4899')
+], true, [monthDividerPlugin]);
+
+// ══ FINANCEIRO & COBRANÇA — CHARTS ══
+
+// ── Contenção vs Transferência Fev vs Mar (Esperanza) ──
+const espFevRetido = 20999, espFevTransf = 1403;
+const espMarRetido = 20378, espMarTransf = 1644;
+const espFevTot = espFevRetido + espFevTransf;
+const espMarTot = espMarRetido + espMarTransf;
+
+new Chart(document.getElementById('barEsperanzaFevMar'), {
+  type: 'bar',
+  data: {
+    labels: ['Fevereiro', 'Março'],
+    datasets: [
+      { label: 'Retido — Fev',      data: [espFevRetido, 0],        backgroundColor: '#10B981', stack: 'fev' },
+      { label: 'Transferido — Fev', data: [espFevTransf, 0],        backgroundColor: '#EF4444', stack: 'fev' },
+      { label: 'Retido — Mar',      data: [0, espMarRetido],        backgroundColor: '#34D399', stack: 'mar' },
+      { label: 'Transferido — Mar', data: [0, espMarTransf],        backgroundColor: '#FCA5A5', stack: 'mar' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        mode: 'index', intersect: false,
+        callbacks: {
+          title(items) { return items[0].dataset.stack === 'fev' ? 'Fevereiro' : 'Março'; },
+          label(ctx) {
+            const v = ctx.raw ?? 0;
+            if (v === 0) return null;
+            const tot = ctx.dataset.stack === 'fev' ? espFevTot : espMarTot;
+            const pct = (v / tot * 100).toFixed(1);
+            return `  ${ctx.dataset.label.split('—')[0].trim()}: ${v.toLocaleString('pt-BR')} (${pct}%)`;
+          },
+          footer(items) {
+            const tot = items[0].dataset.stack === 'fev' ? espFevTot : espMarTot;
+            return `  Total: ${tot.toLocaleString('pt-BR')}`;
+          }
+        },
+        footerFont: { weight: 'bold' }, footerColor: '#FFA300'
+      }
+    },
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, ticks: { callback: v => v.toLocaleString('pt-BR') }, grid: { color: '#F3F4F6' } }
+    }
+  }
+});
+
+// ── Destinos da Esperanza (horizontal bar) ──
+new Chart(document.getElementById('barEsperanzaDest'), {
+  type: 'bar',
+  data: {
+    labels: ['Cobrança', 'Suporte Técnico CV', 'FIDC', 'Liquidação Financeira'],
+    datasets: [{
+      label: 'Transferências',
+      data: [1936, 538, 527, 305],
+      backgroundColor: ['#EF4444','#F97316','#EF4444','#F97316'],
+      borderRadius: 4
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: c => `  ${c.raw.toLocaleString('pt-BR')} transferências` } }
+    },
+    scales: {
+      x: { ticks: { callback: v => v.toLocaleString('pt-BR') }, grid: { color: '#F3F4F6' } },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// ══ MARKETING & COMERCIAL — CHARTS ══
+
+// ── Volume por agente — Fev vs Mar (grouped stacked) ──
+const mktAgentes = ['Dalila', 'Kyara', 'Mariah'];
+const mktFevRetido = [14504, 3494, 2733];
+const mktFevTransf = [4644,   176,   75];
+const mktMarRetido = [13706, 9391, 4067];
+const mktMarTransf = [3654,   338,  108];
+const mktFevTot = mktFevRetido.map((r,i) => r + mktFevTransf[i]);
+const mktMarTot = mktMarRetido.map((r,i) => r + mktMarTransf[i]);
+
+new Chart(document.getElementById('barMktAgentes'), {
+  type: 'bar',
+  data: {
+    labels: mktAgentes,
+    datasets: [
+      { label: 'Retido — Fev',      data: mktFevRetido, backgroundColor: '#10B981', stack: 'fev' },
+      { label: 'Transferido — Fev', data: mktFevTransf, backgroundColor: '#EF4444', stack: 'fev' },
+      { label: 'Retido — Mar',      data: mktMarRetido, backgroundColor: '#34D399', stack: 'mar' },
+      { label: 'Transferido — Mar', data: mktMarTransf, backgroundColor: '#FCA5A5', stack: 'mar' }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        mode: 'index', intersect: false,
+        callbacks: {
+          title(items) { return mktAgentes[items[0].dataIndex]; },
+          label(ctx) {
+            const idx = ctx.dataIndex;
+            const v   = ctx.raw ?? 0;
+            const isFev = ctx.dataset.stack === 'fev';
+            const tot = isFev ? mktFevTot[idx] : mktMarTot[idx];
+            const pct = tot > 0 ? (v / tot * 100).toFixed(1) : '0';
+            const mes = isFev ? 'Fev' : 'Mar';
+            const cat = ctx.dataset.label.split('—')[0].trim();
+            return `  ${mes} · ${cat}: ${v.toLocaleString('pt-BR')} (${pct}%)`;
+          },
+          footer(items) {
+            const idx = items[0].dataIndex;
+            const varPct = mktFevTot[idx] > 0
+              ? ((mktMarTot[idx] - mktFevTot[idx]) / mktFevTot[idx] * 100).toFixed(1)
+              : '0';
+            const sinal = Number(varPct) >= 0 ? '+' : '';
+            return [
+              `  Total Fev: ${mktFevTot[idx].toLocaleString('pt-BR')}`,
+              `  Total Mar: ${mktMarTot[idx].toLocaleString('pt-BR')}  (${sinal}${varPct}%)`
+            ];
+          }
+        },
+        footerFont: { weight: 'bold' }, footerColor: '#FFA300'
+      }
+    },
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, ticks: { callback: v => v.toLocaleString('pt-BR') }, grid: { color: '#F3F4F6' } }
+    }
+  }
+});
+
+// ── Taxa de contenção por agente (Marketing) ──
+const mktContPct = [77.3, 96.2, 97.4];
+const mktContCores = ['#FFA300', '#14B8A6', '#EC4899'];
+
+new Chart(document.getElementById('barMktContencao'), {
+  type: 'bar',
+  data: {
+    labels: mktAgentes,
+    datasets: [{
+      label: 'Contenção (%)',
+      data: mktContPct,
+      backgroundColor: mktContCores,
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label(ctx) {
+            const idx = ctx.dataIndex;
+            const total = [36508, 13399, 6983][idx];
+            const retido = [28225, 12885, 6800][idx];
+            return [
+              `  Contenção: ${ctx.raw}%`,
+              `  Retidos: ${retido.toLocaleString('pt-BR')} de ${total.toLocaleString('pt-BR')}`
+            ];
+          }
+        }
+      }
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: {
+        min: 0, max: 100,
+        ticks: { callback: v => v + '%' },
+        grid: { color: '#F3F4F6' }
+      }
+    }
+  }
+});
+
+// ── DESTINO DAS TRANSFERÊNCIAS — EVOLUÇÃO DIÁRIA POR DEPARTAMENTO ──
+function makeDestLineChart(canvasId, datasets) {
+  new Chart(document.getElementById(canvasId), {
+    type: 'line',
+    data: { labels: dailyLabels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      spanGaps: true,
+      plugins: {
+        legend: {
+          display: true, position: 'bottom',
+          labels: { boxWidth: 12, font: { size: 11 }, padding: 12 },
+          onClick(e, legendItem, legend) {
+            const chart = legend.chart;
+            const idx = legendItem.datasetIndex;
+            const alreadyIsolated = chart._isolatedIndex === idx;
+            if (alreadyIsolated) {
+              // volta a mostrar todos
+              chart.data.datasets.forEach((_, i) => chart.setDatasetVisibility(i, true));
+              chart._isolatedIndex = null;
+            } else {
+              // isola o clicado
+              chart.data.datasets.forEach((_, i) => chart.setDatasetVisibility(i, i === idx));
+              chart._isolatedIndex = idx;
+            }
+            chart.update();
+          }
+        },
+        tooltip: {
+          mode: 'index', intersect: false,
+          callbacks: {
+            title(items) { return items[0]?.label || ''; },
+            label(ctx) {
+              if (ctx.raw === null || ctx.raw === undefined) return null;
+              return `  ${ctx.dataset.label}: ${ctx.raw}%`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: { ticks: { maxTicksLimit: 20, font: { size: 10 } }, grid: { color: '#F3F4F6' } },
+        y: {
+          ticks: { font: { size: 11 }, callback: v => v + '%' },
+          grid: { color: '#F3F4F6' }
+        }
+      }
+    },
+    plugins: [monthDividerPlugin]
+  });
+}
+
+makeDestLineChart('geralDestLine', [
+  { label: 'SDR', data: [7.7,13.3,33.5,30.8,24.0,20.3,38.1,53.8,15.9,13.7,13.1,27.8,41.1,51.3,77.9,60.0,68.9,28.2,36.2,42.0,42.6,2.8,9.7,22.4,10.4,29.9,22.0,11.3,54.2,2.5,22.3,25.3,20.4,2.6,8.3,48.5,17.6,5.8,6.6,2.7,12.8,10.7,17.5,18.9,25.2,23.5,24.4,2.7,19.1,28.6,9.0,11.1,11.8,19.9,13.3,37.5,43.4,9.7,0.7], borderColor:'#3B82F6', backgroundColor:'#3B82F620', pointBackgroundColor:'#3B82F6', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Sucesso do Cliente - SAC', data: [23.1,21.7,19.3,7.9,16.4,23.2,13.5,8.5,9.6,17.2,13.4,11.4,11.1,10.4,3.1,3.8,4.3,8.5,13.8,9.9,23.2,33.3,21.9,21.3,20.5,11.4,8.8,0.7,0.0,18.0,13.5,16.6,11.8,27.2,11.1,3.0,14.0,16.7,16.9,22.7,15.3,25.0,15.0,27.4,22.5,17.5,13.9,22.0,16.9,22.4,14.7,23.0,17.3,15.0,18.0,15.2,10.8,15.6,15.6], borderColor:'#10B981', backgroundColor:'#10B98120', pointBackgroundColor:'#10B981', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Suporte Técnico CV', data: [0.0,1.1,1.3,11.4,16.4,19.9,20.6,2.8,12.1,18.5,19.1,8.1,6.7,15.6,1.8,3.1,1.9,6.6,9.2,9.1,12.9,19.4,13.5,14.1,18.3,16.6,23.9,24.1,25.0,24.1,22.7,21.2,20.7,21.1,36.1,15.2,19.2,16.0,23.9,19.7,20.8,29.8,22.5,12.3,12.6,15.1,15.5,22.5,27.0,12.2,19.3,20.4,17.1,13.8,18.9,12.0,9.6,17.2,19.9], borderColor:'#F59E0B', backgroundColor:'#F59E0B20', pointBackgroundColor:'#F59E0B', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Financeiro Blips', data: [15.4,19.8,11.3,11.7,8.8,9.5,1.6,0.9,10.4,14.7,19.7,7.9,5.6,3.9,1.2,4.8,5.4,8.5,11.2,9.8,1.3,8.3,10.9,10.9,14.0,11.0,13.7,7.8,8.3,14.9,13.5,13.0,11.0,14.3,5.6,3.0,12.6,14.8,13.6,16.2,16.9,8.3,7.5,13.0,13.7,13.7,11.3,17.1,5.6,8.2,18.7,18.9,16.8,13.8,14.6,7.6,4.8,15.6,24.5], borderColor:'#EF4444', backgroundColor:'#EF444420', pointBackgroundColor:'#EF4444', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Sucesso do Cliente - Ongoing', data: [7.7,25.5,15.3,13.8,13.2,17.6,4.0,2.8,12.9,14.0,17.5,8.7,7.9,3.2,2.5,3.5,2.4,8.4,12.8,11.6,4.5,8.3,10.5,12.0,11.0,9.1,9.1,6.4,8.3,15.7,15.3,11.5,14.6,18.1,13.9,9.1,16.0,15.0,18.6,18.6,18.3,14.3,22.5,10.2,11.7,9.5,13.7,16.1,7.9,8.2,13.5,12.1,13.6,11.5,12.8,6.0,7.2,13.5,14.2], borderColor:'#8B5CF6', backgroundColor:'#8B5CF620', pointBackgroundColor:'#8B5CF6', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Cobrança', data: [0.0,1.5,1.1,2.6,10.1,1.3,0.0,2.8,32.1,9.7,3.8,18.5,13.3,3.2,6.7,19.1,3.2,23.0,5.3,5.8,3.2,0.0,19.3,6.3,11.0,13.5,5.5,5.0,0.0,9.1,2.1,2.3,11.8,5.3,8.3,3.0,8.4,14.3,4.3,9.6,1.7,0.0,0.0,12.8,1.5,8.6,1.3,10.5,0.0,0.0,13.5,3.7,3.2,10.2,6.1,1.6,0.0,6.6,13.0], borderColor:'#EC4899', backgroundColor:'#EC489920', pointBackgroundColor:'#EC4899', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Comercial - CV', data: [15.4,9.5,15.6,9.7,5.7,3.9,5.6,4.7,6.2,8.2,9.6,4.8,2.2,1.3,3.1,2.2,1.7,3.3,6.2,4.3,9.7,16.7,3.9,4.8,5.3,5.9,4.7,4.3,4.2,6.8,4.6,5.6,5.0,6.0,16.7,12.1,7.9,11.9,9.0,6.0,13.1,7.1,15.0,3.1,7.7,8.8,10.5,5.9,13.5,16.3,5.2,6.3,14.5,10.2,11.7,8.7,14.5,10.3,6.6], borderColor:'#14B8A6', backgroundColor:'#14B8A620', pointBackgroundColor:'#14B8A6', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Comercial - Sorvete', data: [30.8,7.6,2.6,12.0,5.4,4.2,16.7,23.6,0.8,4.0,3.8,12.7,12.1,11.0,3.7,3.5,12.1,13.4,5.3,7.5,2.6,11.1,10.4,8.2,9.6,2.5,12.4,40.4,0.0,8.9,6.0,4.3,4.7,5.3,0.0,6.1,4.3,5.3,7.0,4.4,1.1,4.8,0.0,2.1,5.1,3.3,9.4,3.2,10.1,4.1,6.2,4.6,5.8,5.6,4.7,11.4,9.6,11.5,5.5], borderColor:'#6366F1', backgroundColor:'#6366F120', pointBackgroundColor:'#6366F1', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+]);
+// CS — 11 departamentos de CS (Socorro + Clara + Luna → destinos CS)
+makeDestLineChart('csDestLine', [
+  { label: 'Sup. Téc. CV e Artesanato', data: [0.0,0.9,0.7,15.5,23.0,23.6,40.7,15.8,22.8,25.8,24.0,18.0,18.0,39.3,17.6,20.8,13.0,19.9,17.9,20.6,23.8,23.3,22.9,20.8,26.5,32.0,36.4,48.6,54.5,29.9,34.6,28.5,30.9,22.8,43.1,31.2,25.9,21.9,26.8,24.7,26.9,32.9,36.0,24.4,23.7,26.6,23.5,29.1,43.6,25.0,28.4,25.4,23.5,26.9,25.9,26.5,32.0,24.9,25.8], borderColor:'#3B82F6', backgroundColor:'#3B82F620', pointBackgroundColor:'#3B82F6', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'SDC - SAC', data: [10.0,13.1,22.4,7.9,21.7,24.4,28.8,42.1,16.1,19.1,17.1,22.1,20.8,24.6,29.4,22.8,23.2,25.8,24.9,21.9,42.5,40.0,36.1,30.9,29.4,22.5,12.9,1.4,0.0,21.1,17.6,20.8,16.0,27.6,13.8,6.2,17.6,21.6,17.9,25.4,17.8,28.6,20.0,21.1,18.5,21.8,18.9,25.6,23.6,33.3,20.4,26.0,22.8,24.1,22.3,28.9,28.0,20.7,18.4], borderColor:'#10B981', backgroundColor:'#10B98120', pointBackgroundColor:'#10B981', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'SDC - Ongoing', data: [5.0,19.1,19.9,17.5,17.3,20.2,8.5,15.8,23.2,18.0,22.4,18.0,20.2,8.2,23.5,23.8,14.5,21.0,23.6,24.7,8.8,10.0,16.6,16.0,15.5,18.0,12.4,12.9,18.2,18.8,20.6,15.5,21.0,19.5,17.2,18.8,19.8,17.8,20.2,21.6,21.5,15.7,28.0,17.5,20.3,13.3,18.9,19.0,10.9,16.7,16.5,14.4,17.6,17.5,17.2,12.0,20.0,17.0,15.4], borderColor:'#F59E0B', backgroundColor:'#F59E0B20', pointBackgroundColor:'#F59E0B', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Onboarding', data: [0.0,14.4,7.4,7.9,10.6,8.1,0.0,0.0,15.0,11.0,13.0,11.1,9.3,3.3,11.8,12.9,7.2,7.5,9.6,11.3,1.2,3.3,9.7,10.8,8.6,9.0,10.2,2.9,0.0,11.7,9.2,10.6,8.2,10.6,3.4,6.2,11.7,10.6,11.3,7.9,11.3,1.4,4.0,14.5,12.9,13.3,14.0,8.9,3.6,8.3,11.1,11.3,13.4,8.9,11.3,2.4,8.0,11.9,12.8], borderColor:'#EF4444', backgroundColor:'#EF444420', pointBackgroundColor:'#EF4444', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Documentação', data: [10.0,4.4,6.6,6.7,9.3,10.5,3.4,0.0,7.1,9.9,10.2,12.0,14.2,3.3,5.9,4.0,17.4,13.4,7.6,6.9,3.8,3.3,5.2,7.3,5.3,4.9,7.1,1.4,0.0,4.5,3.7,8.8,9.9,6.9,3.4,0.0,8.3,6.8,7.4,9.3,10.5,5.7,4.0,8.4,6.5,10.1,6.2,5.1,1.8,0.0,7.8,5.8,5.5,7.4,9.1,9.6,4.0,8.8,12.2], borderColor:'#8B5CF6', backgroundColor:'#8B5CF620', pointBackgroundColor:'#8B5CF6', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Instalação', data: [0.0,8.8,6.6,4.0,8.8,6.2,3.4,5.3,5.6,7.1,5.7,8.8,7.1,3.3,0.0,8.9,8.7,4.8,5.3,4.9,0.0,3.3,3.7,6.6,7.8,4.9,7.6,12.9,0.0,7.5,6.6,6.7,4.1,4.9,1.7,0.0,8.6,7.9,4.3,6.9,6.9,2.9,0.0,6.5,8.2,6.8,7.8,6.0,1.8,0.0,6.3,6.9,8.1,5.4,5.8,6.0,0.0,7.9,8.3], borderColor:'#EC4899', backgroundColor:'#EC489920', pointBackgroundColor:'#EC4899', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Sup. Téc. Food Service', data: [0.0,0.3,0.7,4.4,4.0,2.7,13.6,21.1,4.9,2.8,2.8,2.3,6.0,14.8,11.8,2.0,7.2,3.2,4.7,6.1,10.0,16.7,2.3,1.4,2.4,4.1,4.4,11.4,18.2,2.3,3.7,4.6,4.1,3.7,8.6,18.8,2.8,2.7,3.5,1.0,2.2,5.7,4.0,1.5,2.2,2.6,2.5,2.5,9.1,4.2,4.2,3.6,4.2,3.4,4.2,8.4,4.0,3.4,3.3], borderColor:'#14B8A6', backgroundColor:'#14B8A620', pointBackgroundColor:'#14B8A6', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Suporte (desat.)', data: [75.0,37.2,33.5,31.7,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0], borderColor:'#6366F1', backgroundColor:'#6366F120', pointBackgroundColor:'#6366F1', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Sup. Téc. Fitness & Estética', data: [0.0,0.9,1.8,2.0,0.9,1.2,0.0,0.0,2.6,1.8,0.8,2.3,0.0,0.0,0.0,2.0,4.3,1.6,2.0,2.0,2.5,0.0,1.7,2.1,2.0,1.2,4.4,2.9,0.0,2.6,2.6,2.1,2.1,2.0,3.4,18.8,2.5,5.8,5.1,2.1,1.5,2.9,0.0,2.5,4.3,3.2,5.3,2.5,1.8,8.3,3.3,2.2,2.6,2.9,2.3,3.6,0.0,2.5,1.8], borderColor:'#F97316', backgroundColor:'#F9731620', pointBackgroundColor:'#F97316', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Sup. Téc. Construção', data: [0.0,0.0,0.0,0.8,3.1,2.3,1.7,0.0,2.2,2.8,2.4,3.7,0.5,0.0,0.0,3.0,2.9,1.6,3.7,1.6,7.5,0.0,1.4,2.8,2.4,2.9,3.6,4.3,9.1,1.3,0.7,1.4,1.6,1.6,5.2,0.0,1.5,4.1,2.7,0.3,1.1,4.3,4.0,2.9,0.9,1.3,1.2,0.6,3.6,4.2,1.8,1.9,1.3,1.4,1.3,0.0,0.0,1.4,1.5], borderColor:'#84CC16', backgroundColor:'#84CC1620', pointBackgroundColor:'#84CC16', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Instalação EFF', data: [0.0,0.9,0.4,1.6,1.3,0.8,0.0,0.0,0.4,1.8,1.6,1.8,3.8,3.3,0.0,0.0,1.4,0.5,0.7,0.0,0.0,0.0,0.3,1.4,0.0,0.4,0.9,1.4,0.0,0.3,0.7,1.1,2.1,0.4,0.0,0.0,1.2,0.7,0.8,0.7,0.4,0.0,0.0,0.7,2.6,1.0,1.6,0.6,0.0,0.0,0.3,2.5,1.0,2.0,0.6,2.4,4.0,1.4,0.6], borderColor:'#06B6D4', backgroundColor:'#06B6D420', pointBackgroundColor:'#06B6D4', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+]);
+// FINANCEIRO — 5 departamentos financeiros (Esperanza)
+makeDestLineChart('finDestLine', [
+  { label: 'Cobrança', data: [0,0,100.0,53.8,91.2,100.0,0,100.0,100.0,97.4,100.0,100.0,98.5,100.0,100.0,100.0,87.5,96.0,43.6,91.2,100.0,0,100.0,86.7,78.0,97.0,80.0,100.0,0,78.0,100.0,100.0,95.1,100.0,100.0,100.0,96.8,93.0,100.0,54.0,62.5,0.0,0,72.9,41.2,71.9,18.2,35.6,0.0,0.0,46.2,35.5,34.6,38.8,26.9,100.0,0,35.7,36.4], borderColor:'#3B82F6', backgroundColor:'#3B82F620', pointBackgroundColor:'#3B82F6', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'FIDC', data: [0,0,0.0,38.5,2.9,0.0,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.3,1.8,0.0,0.0,0,0.0,6.7,22.0,1.5,20.0,0.0,0,19.5,0.0,0.0,2.4,0.0,0.0,0.0,0.0,1.8,0.0,38.1,0.0,0.0,0,2.1,0.0,7.0,22.7,18.3,0.0,0.0,29.2,12.9,19.2,21.2,10.3,0.0,0,24.3,24.6], borderColor:'#10B981', backgroundColor:'#10B98120', pointBackgroundColor:'#10B981', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Fallback Cobrança', data: [0,0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0.0,0.0,0.0,50.0,30.8,100.0,0.0,9.2,48.4,38.5,29.7,37.2,0.0,0,10.0,14.4], borderColor:'#F59E0B', backgroundColor:'#F59E0B20', pointBackgroundColor:'#F59E0B', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Financeiro Blips', data: [0,0,0.0,7.7,0.0,0.0,0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,6.2,0.7,0.0,2.9,0.0,0,0.0,0.0,0.0,0.0,0.0,0.0,0,2.4,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,7.9,25.0,100.0,0,21.9,52.9,17.5,4.5,8.7,0.0,100.0,6.9,0.0,3.8,7.3,23.1,0.0,0,24.3,22.9], borderColor:'#EF4444', backgroundColor:'#EF444420', pointBackgroundColor:'#EF4444', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Liquidação Financeira', data: [0,0,0.0,0.0,5.9,0.0,0,0.0,0.0,2.6,0.0,0.0,1.5,0.0,0.0,0.0,6.2,2.0,54.5,5.9,0.0,0,0.0,6.7,0.0,1.5,0.0,0.0,0,0.0,0.0,0.0,2.4,0.0,0.0,0.0,3.2,5.3,0.0,0.0,12.5,0.0,0,3.1,5.9,3.5,4.5,6.7,0.0,0.0,8.5,3.2,3.8,3.0,2.6,0.0,0,5.7,1.7], borderColor:'#8B5CF6', backgroundColor:'#8B5CF620', pointBackgroundColor:'#8B5CF6', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+]);
+// MARKETING — 9 departamentos comerciais (Dalila + Kyara + Mariah)
+makeDestLineChart('mktDestLine', [
+  { label: 'SDR', data: [9.1,51.5,66.1,58.0,76.8,80.3,70.6,63.3,86.3,59.3,71.9,65.5,72.1,84.0,95.5,94.9,83.5,59.1,81.9,79.0,66.0,20.0,38.0,52.1,35.6,70.7,58.8,22.2,72.2,15.9,60.0,69.2,65.5,16.3,37.5,55.2,51.0,25.3,8.7,16.9,35.8,60.0,58.3,69.2,52.3,51.0,53.9,14.5,56.7,46.7,28.3,32.1,23.1,45.1,26.1,39.4,69.2,26.1,5.5], borderColor:'#3B82F6', backgroundColor:'#3B82F620', pointBackgroundColor:'#3B82F6', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Comercial - Sorvete', data: [36.4,25.0,3.7,22.1,15.2,14.5,27.9,26.7,2.1,12.1,14.0,29.5,20.1,16.0,4.5,5.1,14.4,28.0,11.7,13.2,4.0,60.0,39.2,17.9,24.8,5.4,32.4,76.4,0.0,54.0,13.1,10.5,11.5,23.3,0.0,6.9,11.8,20.0,6.1,25.4,3.3,20.0,0.0,6.4,10.6,6.4,21.2,15.8,30.0,6.7,17.6,12.8,10.0,11.8,8.4,9.7,11.5,30.4,41.8], borderColor:'#10B981', backgroundColor:'#10B98120', pointBackgroundColor:'#10B981', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Comercial - Fitness', data: [0.0,0.0,0.5,0.0,0.0,0.0,0.0,0.0,1.1,13.2,1.8,0.9,0.7,0.0,0.0,0.0,0.3,2.4,0.8,2.6,25.0,0.0,16.5,5.8,19.8,1.8,0.7,0.0,16.7,19.0,9.4,8.4,5.3,16.3,50.0,27.6,21.6,30.5,77.5,11.9,0.8,0.0,0.0,1.3,0.9,0.0,0.6,10.5,0.0,0.0,1.3,17.9,7.7,0.7,4.4,0.0,3.8,1.6,3.6], borderColor:'#F59E0B', backgroundColor:'#F59E0B20', pointBackgroundColor:'#F59E0B', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Inatividade', data: [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.5,0.0,0.0,1.0,0.0,0.0,0.6,0.0,0.0,1.8,0.0,0.0,0.0,0.0,5.0,1.4,8.8,23.3,0.0,0.0,5.2,12.6,3.5,25.4,13.0,0.0,0.0,12.8,3.7,3.6,2.4,11.8,0.0,0.0,6.9,19.2,23.1,18.4,35.8,39.4,0.0,11.4,30.9], borderColor:'#EF4444', backgroundColor:'#EF444420', pointBackgroundColor:'#EF4444', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Comercial - CV', data: [0.0,8.8,12.7,6.6,0.0,0.0,0.0,0.0,2.1,6.6,1.8,1.4,1.4,0.0,0.0,0.0,0.8,3.7,2.3,2.3,3.0,0.0,0.6,2.1,3.0,5.0,1.5,0.0,0.0,7.9,2.5,5.6,3.5,4.7,6.2,0.0,2.6,5.3,0.4,5.1,26.0,0.0,0.0,3.2,10.1,10.4,5.5,11.8,3.3,10.0,5.0,5.8,17.2,9.2,11.5,4.0,3.8,11.4,5.5], borderColor:'#8B5CF6', backgroundColor:'#8B5CF620', pointBackgroundColor:'#8B5CF6', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Comercial - Artesanato', data: [0.0,1.5,1.1,7.2,0.0,1.3,0.0,0.0,1.1,5.5,3.5,0.5,2.5,0.0,0.0,0.0,0.0,1.4,1.9,1.0,0.0,0.0,0.6,1.6,3.0,0.9,0.0,0.0,0.0,0.0,1.2,2.1,0.9,2.3,0.0,6.9,2.0,1.1,0.4,3.4,8.1,6.7,0.0,1.3,17.9,21.9,6.7,7.9,0.0,3.3,22.0,5.1,3.2,8.6,9.7,4.6,1.9,7.1,1.8], borderColor:'#EC4899', backgroundColor:'#EC489920', pointBackgroundColor:'#EC4899', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Comercial - Food', data: [18.2,11.8,13.2,1.1,5.1,2.6,0.0,4.4,6.3,2.2,5.3,0.9,1.8,0.0,0.0,0.0,0.5,4.4,0.8,0.6,0.0,20.0,2.5,5.3,3.0,1.4,3.7,0.0,11.1,1.6,5.6,2.1,3.5,2.3,0.0,3.4,0.7,2.1,1.3,1.7,6.5,6.7,16.7,3.2,0.0,2.8,3.0,3.9,0.0,10.0,3.1,3.2,11.8,4.6,0.4,1.1,1.9,7.1,1.8], borderColor:'#14B8A6', backgroundColor:'#14B8A620', pointBackgroundColor:'#14B8A6', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Comercial - Construção', data: [36.4,1.5,0.5,2.8,3.0,1.3,0.0,5.6,0.0,0.0,1.8,0.0,0.4,0.0,0.0,0.0,0.0,0.0,0.8,0.0,2.0,0.0,1.9,14.7,8.9,13.1,0.7,1.4,0.0,0.0,2.5,0.7,0.0,4.7,6.2,0.0,3.9,2.1,0.9,10.2,4.9,6.7,25.0,1.9,1.4,2.4,6.1,17.1,3.3,23.3,8.8,1.9,2.3,1.3,2.7,1.7,7.7,2.2,7.3], borderColor:'#6366F1', backgroundColor:'#6366F120', pointBackgroundColor:'#6366F1', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+  { label: 'Comercial - Confecção', data: [0.0,0.0,2.1,2.2,0.0,0.0,1.5,0.0,1.1,1.1,0.0,1.4,1.1,0.0,0.0,0.0,0.0,1.0,0.0,0.3,0.0,0.0,0.0,0.5,2.0,0.0,2.2,0.0,0.0,1.6,0.6,0.0,0.9,7.0,0.0,0.0,1.3,1.1,1.3,0.0,1.6,0.0,0.0,0.6,3.2,1.6,0.6,6.6,6.7,0.0,6.9,1.9,1.8,0.3,0.9,0.0,0.0,2.7,1.8], borderColor:'#F97316', backgroundColor:'#F9731620', pointBackgroundColor:'#F97316', borderWidth:2, pointRadius:2, tension:0.3, fill:false, spanGaps:true },
+]);
+
+// ── DESTINO DAS TRANSFERÊNCIAS — STACKED BAR POR AGENTE FEV VS MAR ──
+// Cores por agente (consistentes em todos os gráficos)
+const AGENT_COLORS = {
+  'Socorro':   '#8B5CF6',
+  'Dalila':    '#3B82F6',
+  'Esperanza': '#10B981',
+  'Clara':     '#EC4899',
+  'Luna':      '#14B8A6',
+  'Kyara':     '#F59E0B',
+  'Mariah':    '#EF4444',
+};
+function agentColor(name) { return AGENT_COLORS[name] || '#9CA3AF'; }
+function agentColorMar(name) { return (AGENT_COLORS[name] || '#9CA3AF') + '88'; } // ~53% opacidade para Mar
+
+function makeDestStackedChart(canvasId, depts, agentDefs) {
+  // agentDefs: [{label, fevData, marData}]
+  const datasets = [];
+
+  // Fev stack (sólido)
+  agentDefs.forEach(a => {
+    datasets.push({
+      label: a.label,
+      data: a.fevData,
+      backgroundColor: agentColor(a.label),
+      stack: 'Fev',
+      borderWidth: 0,
+      borderRadius: 2,
+      barPercentage: 0.88,
+      categoryPercentage: 0.65,
+    });
+  });
+
+  // Mar stack (translúcido — mesmo agente, mesmo eixo)
+  agentDefs.forEach(a => {
+    datasets.push({
+      label: a.label + ' ·mar',
+      data: a.marData,
+      backgroundColor: agentColorMar(a.label),
+      stack: 'Mar',
+      borderWidth: 0,
+      borderRadius: 2,
+      barPercentage: 0.88,
+      categoryPercentage: 0.65,
+    });
+  });
+
+  new Chart(document.getElementById(canvasId), {
+    type: 'bar',
+    data: { labels: depts, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            filter: item => !item.text.includes('·mar'),
+            boxWidth: 12,
+            font: { size: 11 },
+            padding: 14,
+          }
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          filter: item => item.raw > 0,
+          callbacks: {
+            title: items => items[0]?.label || '',
+            beforeBody(items) {
+              const fevTot = items.filter(i => i.dataset.stack === 'Fev').reduce((s,i) => s + i.raw, 0);
+              const marTot = items.filter(i => i.dataset.stack === 'Mar').reduce((s,i) => s + i.raw, 0);
+              return [`Total  Fev ${fevTot.toFixed(1)}%  ·  Mar ${marTot.toFixed(1)}%`, ''];
+            },
+            label(ctx) {
+              const isMar = ctx.dataset.stack === 'Mar';
+              const name  = ctx.dataset.label.replace(' ·mar', '');
+              const mes   = isMar ? 'Mar' : 'Fev';
+              return `  ${mes} · ${name}: ${ctx.raw}%`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          stacked: true,
+          ticks: { font: { size: 10 }, maxRotation: 30 },
+          grid: { display: false }
+        },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          ticks: { font: { size: 11 }, callback: v => v + '%' },
+          grid: { color: '#F3F4F6' }
+        }
+      }
+    }
+  });
+}
+
+// ── GERAL — top 8 departamentos (todos os agentes) · % = consolidado mensal do gráfico diário
+makeDestStackedChart('geralDestBar',
+  ['SDR','SDC - SAC','Sup. Téc. CV e Art.','Fin. Blips','SDC - Ongoing','Cobrança','Com. CV','Com. Sorvete'],
+  [
+    { label: 'Socorro',   fevData: [0.07,11.38,10.69,9.36,9.09,0.77,4.26,0.57],  marData: [0.08,14.35,18.09,12.67,11.4,1.02,5.42,0.55] },
+    { label: 'Dalila',    fevData: [30.41,0.66,0.34,0.29,0.42,0.02,0.68,7.39],   marData: [14.45,1.32,0.33,0.48,0.77,0.03,2.04,4.41] },
+    { label: 'Esperanza', fevData: [0.04,0.19,0.07,0.04,0.37,10.17,0.04,0.01],   marData: [0.02,1.05,0.02,1.43,0.59,6.12,0.03,0.0] },
+    { label: 'Kyara',     fevData: [0.7,0.0,0.0,0.02,0.1,0.01,0.41,0.25],        marData: [0.15,0.02,0.0,0.01,0.17,0.0,0.75,0.48] },
+    { label: 'Mariah',    fevData: [0.0,0.64,0.0,0.01,0.0,0.0,0.0,0.06],         marData: [0.0,0.96,0.02,0.01,0.02,0.0,0.0,0.02] },
+    { label: 'Luna',      fevData: [0.01,0.0,0.01,0.0,0.39,0.01,0.02,0.0],       marData: [0.0,0.0,0.0,0.0,0.65,0.01,0.0,0.0] },
+    { label: 'Clara',     fevData: [0.0,0.0,0.0,0.01,0.0,0.0,0.03,0.0],          marData: [0.0,0.0,0.0,0.0,0.0,0.0,0.04,0.0] },
+  ]
+);
+
+// ── CS — 11 departamentos (todos os agentes que transferiram para áreas CS)
+makeDestStackedChart('csDestBar',
+  ['SDC - SAC','Sup. Téc. CV e Art.','SDC - Ongoing','Onboarding','Documentação','Instalação','Food Service','Suporte (desat.)','Fitness & Est.','Construção','Instal. EFF'],
+  [
+    { label: 'Socorro',   fevData: [19.64,20.11,16.22,8.96,3.31,5.93,3.69,5.86,1.64,2.07,0.78], marData: [17.29,26.33,15.02,10.03,3.03,5.98,3.24,0.0,2.76,1.51,0.7] },
+    { label: 'Clara',     fevData: [0.0,0.0,0.0,0.24,3.59,0.0,0.0,0.0,0.0,0.0,0.0],             marData: [0.0,0.0,0.0,0.07,3.21,0.0,0.0,0.0,0.0,0.0,0.01] },
+    { label: 'Dalila',    fevData: [1.14,0.64,0.75,0.49,0.47,0.17,0.07,0.08,0.07,0.07,0.1],     marData: [1.59,0.48,1.02,0.69,0.71,0.38,0.07,0.0,0.07,0.07,0.17] },
+    { label: 'Esperanza', fevData: [0.33,0.13,0.66,0.09,0.14,0.11,0.04,0.02,0.04,0.02,0.05],   marData: [1.27,0.03,0.77,0.0,0.16,0.15,0.06,0.0,0.04,0.03,0.13] },
+    { label: 'Luna',      fevData: [0.0,0.02,0.69,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],            marData: [0.0,0.0,0.86,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0] },
+    { label: 'Mariah',    fevData: [1.1,0.0,0.0,0.0,0.0,0.0,0.06,0.0,0.0,0.0,0.0],             marData: [1.15,0.03,0.03,0.0,0.02,0.0,0.0,0.0,0.0,0.0,0.0] },
+    { label: 'Kyara',     fevData: [0.0,0.0,0.18,0.02,0.16,0.02,0.0,0.0,0.0,0.0,0.03],         marData: [0.02,0.0,0.22,0.01,0.42,0.07,0.0,0.0,0.01,0.03,0.05] },
+  ]
+);
+
+// ── FINANCEIRO — 5 departamentos (todos os agentes que transferiram para áreas Fin)
+makeDestStackedChart('finDestBar',
+  ['Cobrança','FIDC','Fallback Cob.','Fin. Blips','Liquidação Fin.'],
+  [
+    { label: 'Socorro',   fevData: [6.54,0.75,0.0,0.36,0.57],   marData: [7.38,0.68,0.08,10.55,0.77] },
+    { label: 'Dalila',    fevData: [0.17,0.44,0.0,0.01,0.64],   marData: [0.21,0.76,0.0,0.4,0.35] },
+    { label: 'Esperanza', fevData: [86.7,0.78,0.0,0.0,2.73],    marData: [44.45,15.14,15.16,1.19,2.71] },
+    { label: 'Kyara',     fevData: [0.08,0.14,0.0,0.0,0.0],     marData: [0.0,0.0,0.0,0.01,0.0] },
+    { label: 'Luna',      fevData: [0.08,0.0,0.0,0.0,0.0],      marData: [0.07,0.0,0.0,0.0,0.0] },
+  ]
+);
+
+// ── MARKETING — 9 departamentos (todos os agentes que transferiram para áreas Mkt)
+makeDestStackedChart('mktDestBar',
+  ['SDR','Com. CV','Com. Sorvete','Com. Fitness','Inatividade','Com. Confecção','Com. Construção','Com. Artesanato','Com. Food'],
+  [
+    { label: 'Dalila',    fevData: [68.66,0.31,15.59,1.94,0.16,0.07,1.32,0.92,1.81], marData: [39.32,1.89,10.87,9.13,12.2,0.26,1.49,6.83,2.47] },
+    { label: 'Socorro',   fevData: [0.16,1.93,1.2,0.75,0.0,0.51,0.81,0.02,0.42],    marData: [0.21,5.02,1.35,1.11,0.13,1.16,1.46,0.08,0.63] },
+    { label: 'Kyara',     fevData: [1.58,0.19,0.53,0.12,0.07,0.02,0.06,0.26,0.28],  marData: [0.4,0.7,1.18,0.46,0.37,0.19,0.36,0.11,0.37] },
+    { label: 'Mariah',    fevData: [0.0,0.0,0.13,0.0,0.0,0.0,0.0,0.0,0.0],          marData: [0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0,0.0] },
+    { label: 'Esperanza', fevData: [0.09,0.02,0.02,0.0,0.0,0.0,0.0,0.02,0.0],       marData: [0.05,0.03,0.0,0.0,0.03,0.01,0.01,0.0,0.0] },
+  ]
+);
+
+// ── TAB SWITCHING ──
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = document.getElementById('tab-' + btn.dataset.tab);
+    tab.classList.add('active');
+    // Resize charts in the newly visible tab so they render correctly
+    requestAnimationFrame(() => {
+      Object.values(Chart.instances).forEach(chart => {
+        if (tab.contains(chart.canvas)) chart.resize();
+      });
+    });
+  });
+});
+</script>
+</body>
+</html>
