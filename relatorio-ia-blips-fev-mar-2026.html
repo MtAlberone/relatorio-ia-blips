@@ -746,7 +746,7 @@
       <div class="chart-card">
         <h3>Comparativo mensal por pilar — Fev vs Mar</h3>
         <div class="chart-sub">Sem IA vs Via IAs Comerciais · cada pilar com dois meses lado a lado · passe o mouse para detalhes</div>
-        <div class="chart-wrap" style="height:300px">
+        <div class="chart-wrap" style="height:380px">
           <canvas id="barMktGrupos"></canvas>
         </div>
         <div class="legend" style="margin-top:12px">
@@ -762,14 +762,17 @@
       </div>
       <div class="chart-card">
         <h3>Porta de entrada por pilar (% via cada agente)</h3>
-        <div class="chart-sub">Dalila SDR · Dalila Vendas · Kyara/Outros · Direto</div>
-        <div class="chart-wrap" style="height:300px">
+        <div class="chart-sub">Dalila SDR · Dalila Outbound · Dalila Vendas · Kyara · Mariah · Esperanza · Direto</div>
+        <div class="chart-wrap" style="height:420px">
           <canvas id="barMktGateway"></canvas>
         </div>
         <div class="legend" style="margin-top:12px">
           <div class="legend-item"><div class="legend-dot" style="background:#FFA300"></div>Via Dalila SDR</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#FB923C"></div>Via Dalila Outbound</div>
           <div class="legend-item"><div class="legend-dot" style="background:#F59E0B"></div>Via Dalila Vendas</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#14B8A6"></div>Via Kyara+Outros</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#14B8A6"></div>Via Kyara</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#EC4899"></div>Via Mariah</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#8B5CF6"></div>Via Esperanza</div>
           <div class="legend-item"><div class="legend-dot" style="background:#E5E7EB"></div>Chegou direto</div>
         </div>
       </div>
@@ -1496,33 +1499,32 @@ new Chart(document.getElementById('barEsperanzaGateway'), {
 });
 
 // ══ MARKETING — Comparativo por Pilar ══
-const mktGrupos      = ['IA (retidos)', 'SDR', 'Comercial CV', 'Com. Sorvete', 'Outras Comerc.', 'Inatividade'];
-const mktGruposShort = ['IA (retidos)', 'SDR', 'Comercial CV', 'Com. Sorvete', 'Outras Comerc.', 'Inatividade'];
+const mktGrupos = ['IA (retidos)','SDR','Com. Sorvete','Com. CV','Com. Suprimentos','Com. Artesanato','Com. Fitness','Com. Confecção','Com. Food','Com. Pizza','Com. Construção','Inatividade'];
 // Sem IA
-const mktFevSemIA   = [    0,  240, 1652, 1006, 3324,  366];
-const mktMarSemIA   = [    0,  103, 2917, 2200, 7070,  195];
+const mktFevSemIA  = [0,237,923,1126,2033,749,595,619,394,189,459,361];
+const mktMarSemIA  = [0,103,2128,2252,2860,2248,1037,1893,674,855,637,193];
 // Via Dalila SDR
-const mktFevViaSdr  = [11150, 3048,   60,  543,  397,   10];
-const mktMarViaSdr  = [12083, 1476,  229,  347,  685,    9];
+const mktFevViaSdr = [11150,3048,543,60,8,41,121,18,80,8,84,10];
+const mktMarViaSdr = [12083,1476,347,229,20,281,388,38,84,34,94,467];
 // Via Dalila Vendas
-const mktFevViaVen  = [  392,    2,   24,  209,   72,    2];
-const mktMarViaVen  = [  834,    4,    1,  113,  108,    3];
+const mktFevViaVen = [392,2,209,24,0,10,0,6,21,3,19,0];
+const mktMarViaVen = [834,4,113,1,0,0,0,2,36,24,10,0];
 // Via Outros (Outbound + Kyara + Mariah)
-const mktFevViaOut  = [ 9276,   46,   38,   18,  -33,    0]; // negativo corrigido para 0
-const mktMarViaOut  = [14142,   15,   80,   36,  226,  460];
+const mktFevViaOut = [9202,69,32,42,3,13,7,7,15,9,5,5];
+const mktMarViaOut = [13784,15,52,83,5,8,19,28,17,10,26,19];
 // Total por mês
-const mktFevTotais  = mktFevSemIA.map((v,i) => v + mktFevViaSdr[i] + mktFevViaVen[i] + Math.max(0,mktFevViaOut[i]));
-const mktMarTotais  = mktMarSemIA.map((v,i) => v + mktMarViaSdr[i] + mktMarViaVen[i] + Math.max(0,mktMarViaOut[i]));
+const mktFevTotais = mktFevSemIA.map((v,i) => v + mktFevViaSdr[i] + mktFevViaVen[i] + mktFevViaOut[i]);
+const mktMarTotais = mktMarSemIA.map((v,i) => v + mktMarViaSdr[i] + mktMarViaVen[i] + mktMarViaOut[i]);
 
 new Chart(document.getElementById('barMktGrupos'), {
   type: 'bar',
   data: {
     labels: mktGrupos,
     datasets: [
-      { label: 'Sem IA — Fev',         data: mktFevSemIA,  backgroundColor: '#4B5563', stack: 'fev' },
+      { label: 'Sem IA — Fev',          data: mktFevSemIA,  backgroundColor: '#4B5563', stack: 'fev' },
       { label: 'Via Dalila SDR — Fev',  data: mktFevViaSdr, backgroundColor: '#FFA300', stack: 'fev' },
       { label: 'Via Dalila Vendas — Fev',data: mktFevViaVen,backgroundColor: '#F59E0B', stack: 'fev' },
-      { label: 'Via Outros — Fev',      data: mktFevViaOut.map(v=>Math.max(0,v)), backgroundColor: '#14B8A6', stack: 'fev' },
+      { label: 'Via Outros — Fev',      data: mktFevViaOut,  backgroundColor: '#14B8A6', stack: 'fev' },
       { label: 'Sem IA — Mar',          data: mktMarSemIA,  backgroundColor: '#9CA3AF', stack: 'mar' },
       { label: 'Via Dalila SDR — Mar',  data: mktMarViaSdr, backgroundColor: '#FBBF24', stack: 'mar' },
       { label: 'Via Dalila Vendas — Mar',data: mktMarViaVen,backgroundColor: '#FCD34D', stack: 'mar' },
@@ -1537,7 +1539,7 @@ new Chart(document.getElementById('barMktGrupos'), {
       tooltip: {
         mode: 'index', intersect: false,
         callbacks: {
-          title(items) { return mktGruposShort[items[0].dataIndex]; },
+          title(items) { return mktGrupos[items[0].dataIndex]; },
           label(ctx) {
             const idx = ctx.dataIndex, v = ctx.raw ?? 0;
             if (v === 0) return null;
@@ -1559,40 +1561,37 @@ new Chart(document.getElementById('barMktGrupos'), {
       }
     },
     scales: {
-      x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 30 } },
+      x: { stacked: true, grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 35 } },
       y: { stacked: true, ticks: { callback: v => v.toLocaleString('pt-BR') }, grid: { color: '#F3F4F6' } }
     }
   }
 });
 
-// Mkt gateway — por pilar, breakdown por agente (% do total do pilar)
-const mktGwLabels  = ['SDR', 'Comercial CV', 'Com. Sorvete', 'Com. Artesanato', 'Com. CV'];
-const mktGwViaSdr  = [4524,  289,  890,  322,  289];
-const mktGwViaVen  = [   6,   25,  322,   10,   25];
-const mktGwViaOut  = [  84,  159,   76,   21,  159]; // Outbound+Kyara+Mariah
-const mktGwDireto  = [ 343, 4569, 3206, 3437, 4569];
-const mktGwLabelsGw= ['SDR', 'Comercial CV', 'Com. Sorvete', 'Artesanato', 'Construção'];
-// Simpler gateway: just SDR and Sorvete (dominant)
-const mktGwLbls2   = ['SDR', 'Com. Sorvete', 'Artesanato', 'Construção', 'Confecção'];
-const mktGwVia2    = [4584, 1266, 353, 208, 99];
-const mktGwDir2    = [ 343, 3206, 3433, 1304, 2835];
-const mktGwTot2    = mktGwVia2.map((v,i) => v + mktGwDir2[i]);
-// Breakdown por Dalila: SDR%, Vendas%, Outros%, Direto%
-const mktGwViaSdrPct = mktGwVia2.map((_,i) => {
-  const sdr=[4524,543,322,178,56]; const ven=[6,322,10,29,8]; const out=[54,401,21,1,35];
-  const d=mktGwDir2[i]; const t=mktGwTot2[i];
-  return [+(sdr[i]/t*100).toFixed(1), +(ven[i]/t*100).toFixed(1), +(out[i]/t*100).toFixed(1), +(d/t*100).toFixed(1)];
-});
+// Mkt gateway — todos os departamentos comerciais, breakdown por agente (% do total do pilar)
+const mktGwLbls2        = ['SDR','Com. Sorvete','Com. CV','Com. Suprimentos','Com. Artesanato','Com. Fitness','Com. Confecção','Com. Food','Com. Pizza','Com. Construção','Inatividade'];
+const mktGwDalilaSdr    = [91.8, 19.9,  5.8,  0.4,  8.5, 22.4,  1.9, 11.8,  3.6, 11.8, 45.6];
+const mktGwDalilaOutbound=[1.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.1,  0.0];
+const mktGwDalilaVendas = [ 0.1,  7.2,  0.5,  0.0,  0.3,  0.0,  0.3,  4.1,  2.3,  1.9,  0.0];
+const mktGwKyara        = [ 0.8,  1.7,  2.5,  0.1,  0.6,  1.1,  1.2,  2.3,  1.6,  2.0,  2.3];
+const mktGwMariah       = [ 0.0,  0.2,  0.0,  0.1,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0];
+const mktGwEsperanza    = [ 0.1,  0.0,  0.6,  2.5,  0.2,  0.2,  0.2,  0.1,  0.0,  0.1,  0.3];
+const mktGwDir2         = mktGwDalilaSdr.map((_,i) => +(Math.max(0, 100
+  - mktGwDalilaSdr[i] - mktGwDalilaOutbound[i] - mktGwDalilaVendas[i]
+  - mktGwKyara[i] - mktGwMariah[i] - mktGwEsperanza[i])).toFixed(1));
+const mktGwTot2         = [4927, 4472, 5001, 6290, 3786, 2268, 2934, 1389, 1163, 1512, 1045];
 
 new Chart(document.getElementById('barMktGateway'), {
   type: 'bar',
   data: {
     labels: mktGwLbls2,
     datasets: [
-      { label: 'Via Dalila SDR',    data: mktGwViaSdrPct.map(r=>r[0]), backgroundColor: '#FFA300' },
-      { label: 'Via Dalila Vendas', data: mktGwViaSdrPct.map(r=>r[1]), backgroundColor: '#F59E0B' },
-      { label: 'Via Outros (Kyara+)',data: mktGwViaSdrPct.map(r=>r[2]),backgroundColor: '#14B8A6' },
-      { label: 'Chegou direto',     data: mktGwViaSdrPct.map(r=>r[3]), backgroundColor: '#E5E7EB' }
+      { label: 'Via Dalila SDR',      data: mktGwDalilaSdr,     backgroundColor: '#FFA300' },
+      { label: 'Via Dalila Outbound', data: mktGwDalilaOutbound, backgroundColor: '#FB923C' },
+      { label: 'Via Dalila Vendas',   data: mktGwDalilaVendas,  backgroundColor: '#F59E0B' },
+      { label: 'Via Kyara',           data: mktGwKyara,          backgroundColor: '#14B8A6' },
+      { label: 'Via Mariah',          data: mktGwMariah,         backgroundColor: '#EC4899' },
+      { label: 'Via Esperanza',       data: mktGwEsperanza,      backgroundColor: '#8B5CF6' },
+      { label: 'Chegou direto',       data: mktGwDir2,           backgroundColor: '#E5E7EB' }
     ]
   },
   options: {
